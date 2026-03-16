@@ -1,0 +1,2392 @@
+{
+  "name": "Adjudication",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "typeVersion": 1,
+      "position": [
+        2784,
+        1136
+      ],
+      "id": "f448c3ab-e159-48bf-81a9-349462c27a65",
+      "name": "Calculator"
+    },
+    {
+      "parameters": {
+        "sendTo": "=ceo@texasbc.org",
+        "subject": "=Error in GET Google Sheet: Dispute",
+        "message": "=<div style=\"font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;\">\n    <div style=\"background-color: #DE350B; color: white; padding: 20px; text-align: center;\">\n        <h2 style=\"margin: 0;\">Google Sheet Error</h2>\n    </div>\n    \n    <div style=\"padding: 30px; line-height: 1.6; color: #333;\">\n        <p>An error occurred while calling <strong> GET in Google Sheet</strong>.</p>\n\n            <p style=\"padding: 8px; border-bottom: 1px solid #EEE;\"><strong>Case ID:</strong>\n            # {{ $json.caseId || 'N/A' }} </p>\n\n            <p style=\"padding: 8px; border-bottom: 1px solid #EEE;\"><strong>Message:</strong> {{ $json.message || 'N/A'}}\n           </p>\n            <p style=\"padding: 8px; border-bottom: 1px solid #EEE;\"><strong>Result:</strong> {{ $json.result || 'N/A' }}\n           </p>\n        </div>\n\n        \n        <div style=\"background-color: #f8f9fa; padding: 15px; border-left: 4px solid #DE350B; margin: 20px 0;\">\n            <strong>Error Details:</strong><br>\n            <code style=\"word-break: break-all; color: #DE350B;\">\n                {{ \n                   $json.error?.message ? $json.error.message : \n                   (typeof $json.error === 'string' ? $json.error : JSON.stringify($json.error)) \n                }}\n            </code>\n        </div>\n\n        <p style=\"font-size: 14px;\"><strong>Full Technical Context:</strong></p>\n        <pre style=\"background: #2D3436; color: #00D1FF; padding: 15px; border-radius: 5px; font-size: 11px; overflow-x: auto;\">\n{{ JSON.stringify($json, null, 2) || 'N/A' }}\n        </pre>\n    </div>\n    \n    <div style=\"background-color: #f4f4f4; padding: 15px; text-align: center; font-size: 12px; color: #666;\">\n        Timestamp: {{ new Date().toISOString() || 'N/A' }}\n    </div>\n</div>",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "Arbitration System"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1376,
+        1056
+      ],
+      "id": "57b0dc7c-c684-414c-a03e-ce0a5d9b1ce9",
+      "name": "Error 2 Admin1",
+      "webhookId": "717eaf70-3734-4e5e-843f-719266940413",
+      "executeOnce": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ANRO7cdYCJKI7fae",
+          "name": "Gmail: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "de6f8b07-96a7-465e-8c15-1b5d9ed56622",
+                    "leftValue": "={{ $json['Dispute Time'] }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "empty",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "No Dispute Time"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "24b90634-6940-40b7-a626-880dba8231a1",
+                    "leftValue": "={{ $now }}",
+                    "rightValue": "={{ DateTime.fromISO($json['Dispute Time'] ).plus({ days: 7 }) }}",
+                    "operator": {
+                      "type": "dateTime",
+                      "operation": "after"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Valid Time"
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1376,
+        848
+      ],
+      "id": "c18b4153-73d2-48cb-9e36-932044dd46a8",
+      "name": "Adjudication",
+      "alwaysOutputData": false,
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "sendTo": "=ceo@texasbc.org",
+        "subject": "=Error in Dispute Time",
+        "message": "=<div style=\"font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;\">\n    <div style=\"background-color: #DE350B; color: white; padding: 20px; text-align: center;\">\n        <h2 style=\"margin: 0;\">Google Sheet: Dispute Time Error</h2>\n    </div>\n    \n    <div style=\"padding: 30px; line-height: 1.6; color: #333;\">\n        <p>An error occurred while calling <strong> GET in Google Sheet</strong>.</p>\n\n            <p style=\"padding: 8px; border-bottom: 1px solid #EEE;\"><strong>Case ID:</strong>\n            # {{ $('Get Disputed Cases').item.json['Case ID'] }} </p>\n\n           \n        </div>\n\n        \n        <div style=\"background-color: #f8f9fa; padding: 15px; border-left: 4px solid #DE350B; margin: 20px 0;\">\n            <strong>Error Details:</strong><br>\n            <code style=\"word-break: break-all; color: #DE350B;\">\n                {{ \n                   $json.error?.message ? $json.error.message : \n                   (typeof $json.error === 'string' ? $json.error : JSON.stringify($json.error)) \n                }}\n            </code>\n        </div>\n\n        <p style=\"font-size: 14px;\"><strong>Full Technical Context:</strong></p>\n        <pre style=\"background: #2D3436; color: #00D1FF; padding: 15px; border-radius: 5px; font-size: 11px; overflow-x: auto;\">\n{{ JSON.stringify($json, null, 2) }}\n        </pre>\n    </div>\n    \n    <div style=\"background-color: #f4f4f4; padding: 15px; text-align: center; font-size: 12px; color: #666;\">\n        Timestamp: {{ new Date().toISOString() }}\n    </div>\n</div>",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "Arbitration System"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1696,
+        1056
+      ],
+      "id": "cbfd0279-fd34-488f-bdc0-1c3ab6767619",
+      "name": "Error 2 Admin2",
+      "webhookId": "717eaf70-3734-4e5e-843f-719266940413",
+      "executeOnce": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ANRO7cdYCJKI7fae",
+          "name": "Gmail: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ",
+          "mode": "list",
+          "cachedResultName": "Arbitration",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1664223804,
+          "mode": "list",
+          "cachedResultName": "Cases",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ/edit#gid=1664223804"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Status",
+              "lookupValue": "DISPUTED"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1120,
+        864
+      ],
+      "id": "ef727222-cd48-44db-b9d3-0559da8c1c86",
+      "name": "Get Disputed Cases",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8PyGKtbWRXXj7YKz",
+          "name": "Sheets: governplanet"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ",
+          "mode": "list",
+          "cachedResultName": "Arbitration",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1529558922,
+          "mode": "list",
+          "cachedResultName": "Messages",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ/edit#gid=1529558922"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Case ID (FK)",
+              "lookupValue": "={{ $json['Case ID'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2064,
+        992
+      ],
+      "id": "1e077656-71b2-4243-ae98-3b57013c1ffe",
+      "name": "Get Messages",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8PyGKtbWRXXj7YKz",
+          "name": "Sheets: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ",
+          "mode": "list",
+          "cachedResultName": "Arbitration",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1306051307,
+          "mode": "list",
+          "cachedResultName": "Files",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ/edit#gid=1306051307"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Case ID (FK)",
+              "lookupValue": "={{ $json['Case ID'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2064,
+        1168
+      ],
+      "id": "b7157de3-6d53-4422-bae5-d197492be893",
+      "name": "Get Files",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8PyGKtbWRXXj7YKz",
+          "name": "Sheets: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{$json.user_prompt}}",
+        "hasOutputParser": true,
+        "needsFallback": true,
+        "options": {
+          "systemMessage": "You are a Magistrate Judge conducting impartial case investigation for an automated arbitration system. Your role is to analyze evidence and prepare a neutral investigation report—not to issue final rulings.\n\n---\n\n## INVESTIGATION PROTOCOL\n\n**1. Evidence Review**\n- Download and inspect all files using google_drive_tool (refer to File IDs in the Evidence Files table)\n- For damage/condition claims, visually inspect associated images\n- Never reference files you haven't actually downloaded\n- If a file is inaccessible, mark it \"NOT REVIEWED\" in your reasoning\n\n**2. External Verification**\n- Use httprequest_tool to verify claims that can be queried from external sources or public data\n- Examples: tracking numbers, blockchain transactions, public records, API-accessible data\n- Only verify when a claim references verifiable external information\n- Include verification results in your facts or contradictions arrays\n\n**3. Financial Calculations**\n- All currency values are in Wei (1 ETH = 1,000,000,000,000,000,000 Wei)\n- Use calculator_tool for ALL financial operations:\n  - Addition: buyer_payout + seller_payout \n- Verify: recommended_buyer_payout + recommended_seller_payout = escrow_balance\n- Both payouts must be non-negative Wei integers (as strings, no leading zeros)\n\n**4. Burden of Proof**\n- Both parties bear equal burden of proof\n- Document all verified facts in the `facts` array\n- Flag conflicts in the `contradictions` array (e.g., \"Buyer claims delivery on Feb 5, but tracking shows Feb 7\")\n- Add unsupported claims to `unsubstantiated_claims` array\n- Do not fill evidence gaps with assumptions\n\n**5. Analysis Requirements**\n- Build chronological timeline from messages and files\n- Compare contract terms against party claims\n- Cross-reference file metadata with verbal statements\n- Identify contradictions between evidence sources (messages vs files, buyer vs seller claims)\n- In the `reasoning` field, explain how the evidence supports your payout recommendation\n- Every fact must cite its source: file ID (e.g., \"file: abc123\"), message timestamp (e.g., \"Buyer, 2026-02-05 14:32\"), or external verification (e.g., \"verified via tracking API\")\n\n---\n\n## OUTPUT STRUCTURE\n\nYour response will be validated against this JSON schema:\n- `caseId`: Extract from the case brief\n- `escrow_balance`: Copy the Escrow Balance value exactly\n- `summary`: Neutral overview of dispute and timeline\n- `facts`: Array of verified facts (each with evidence citation)\n- `contradictions`: Array of conflicts between claims/evidence or between parties\n- `unsubstantiated_claims`: Array of claims lacking evidence\n- `reasoning`: Explanation of how facts support your payout recommendation\n- `recommended_buyer_payout`: Wei string (must sum with seller payout to escrow_balance)\n- `recommended_seller_payout`: Wei string (must sum with buyer payout to escrow_balance)",
+          "maxIterations": 5
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        2704,
+        896
+      ],
+      "id": "7393160d-940d-439a-9a32-5e5b99045b19",
+      "name": "Magistrate Judge"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ==========================================================\n// 1. INPUT RETRIEVAL\n// ==========================================================\nconst caseItem = $('Limit').first().json;\n\nlet messageItems = [];\ntry { \n  messageItems = $('Get Messages').all(); \n} catch (e) {\n  // Messages node not executed or empty\n}\n\nlet fileItems = [];\ntry { \n  fileItems = $('Get Files').all(); \n} catch (e) {\n  // File List node not executed or empty\n}\n\n// ==========================================================\n// 2. STATE DETECTION (The \"Smart\" Logic)\n// ==========================================================\nlet contractFileId = null;\nlet userFiles = [];\nconst hasMessages = messageItems.length > 0;\n\n// Separate the Contract from User Evidence\nfileItems.forEach(f => {\n  const d = f.json;\n  const name = (d[\"Original Name\"] || \"\").toLowerCase();\n  const isContract = name.includes(\"contract\") || d.Message === \"Contract\";\n  \n  if (isContract) {\n    contractFileId = d.ID;\n  } else {\n    userFiles.push(d);\n  }\n});\n\nconst hasContractPdf = contractFileId !== null;\nconst hasUserFiles = userFiles.length > 0;\n\n// ==========================================================\n// 3. DYNAMIC INSTRUCTION GENERATOR\n// ==========================================================\nlet caseSpecificInstructions = [];\n\n// A. Contract Instructions\nif (hasContractPdf) {\n  caseSpecificInstructions.push(\n    `Download and read the Contract PDF (ID: ${contractFileId}) — this is your primary legal authority.`\n  );\n} else {\n  caseSpecificInstructions.push(\n    `No Contract PDF available. The Contract Text is your source of truth.`\n  );\n}\n\n// B. Evidence Instructions\nif (hasUserFiles) {\n  caseSpecificInstructions.push(\n    `Cross-reference the ${userFiles.length} evidence file${userFiles.length > 1 ? 's' : ''} against the messages and contract terms when needed.`\n  );\n} else {\n  caseSpecificInstructions.push(\n    `No evidence files submitted. Evaluate based on contract and messages only.`\n  );\n}\n\n// C. Communication Instructions\nif (!hasMessages) {\n  caseSpecificInstructions.push(\n    `No messages exchanged. Rely on contractual obligations and files.`\n  );\n}\n\n// ==========================================================\n// 4. DATA FORMATTING (Wei, Messages, Table)\n// ==========================================================\nconst escrowFund = BigInt(caseItem[\"Escrow Fund\"] || 0); \nconst refundToBuyer = BigInt(caseItem[\"Refund to Buyer\"] || 0); \nconst paymentToSeller = BigInt(caseItem[\"Payment to Seller\"] || 0); \nconst rawAvailable = escrowFund - refundToBuyer - paymentToSeller; \nconst escrowBalance = rawAvailable > 0n ? rawAvailable : 0n; \n\n// // Format message log\n// const messageLog = hasMessages \n//   ? messageItems.map(m => {\n//       const sender = m.json.Sender || \"Unknown\";\n//       const content = m.json.Content || \"\";\n//       return `**[${sender}]**: ${content}`;\n//     }).join('\\n\\n')\n//   : \"_No messages submitted._\";\n\n\n// Format Message Log with Time and Source\nconst messageLog = hasMessages \n  ? messageItems.map(m => {\n      const sender = m.json.Sender || \"Unknown\";\n      const content = m.json.Content || \"\";\n      const msgTime = m.json.Time ? new Date(m.json.Time).toISOString().replace('T', ' ').substring(0, 16) : \"Unknown Time\";\n        \n      return `**${msgTime} UTC [${sender}]**: ${content}`;\n    }).join('\\n\\n')\n  : \"_No messages submitted._\";\n\n\n\n// Format file table\nconst fileTable = hasUserFiles\n  ? userFiles.map(d => {\n      const submitter = d.Submitter || \"Unknown\";\n      const filename = d[\"Original Name\"] || \"Unnamed File\";\n      const id = d.ID || \"N/A\";\n      return `| ${submitter} | ${filename} | ${id} |`;\n    }).join('\\n')\n  : \"_No user evidence files submitted._\";\n\n// ==========================================================\n// 5. FINAL PROMPT ASSEMBLY\n// ==========================================================\n\nconst signed_time = caseItem[\"Time\"] ? new Date(caseItem[\"Time\"]).toISOString().replace('T', ' ').substring(0, 16) : 'No Signing Time'; \nconst time_now = new Date().toISOString().replace('T', ' ').substring(0, 16);\n\nconst userPrompt = `\n\n# Case #${caseItem[\"Case ID\"]}  \n\n**Current Time:** ${time_now} UTC  \n**Contract Signed:** ${signed_time} UTC   \n\n## Parties: \n- **Buyer:** ${caseItem.Buyer} (${caseItem[\"Buyer Email\"]})\n- **Seller:** ${caseItem.Seller} (${caseItem[\"Seller Email\"]})\n\n## Financials: \n- **Total Escrow Fund:** ${escrowFund.toString()} Wei\n- **Refunded to Buyer:** ${refundToBuyer.toString()} Wei\n- **Paid to Seller:** ${paymentToSeller.toString()} Wei\n- **Escrow Balance:** ${escrowBalance.toString()} Wei\n\n## Evidence Files: \n| Source | Filename | File ID |\n|--------|----------|---------|\n${hasContractPdf ? `| SYSTEM | **Contract.pdf** | ${contractFileId} |\\n` : \"\"}${fileTable}\n\n## Messages:\n${messageLog}\n\n## Contract Text:\n\\`\\`\\`\n${caseItem[\"Contract Text\"] || \"No contract text provided.\"}\n\\`\\`\\`\n\n## Investigation Instructions:\n${caseSpecificInstructions.map(i => `• ${i}`).join('\\n\\n')}`;\n\nreturn { \n  user_prompt: userPrompt \n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2496,
+        896
+      ],
+      "id": "6a0d6796-5e34-41e7-ac85-77def666fe7f",
+      "name": "Prepare Case Packet",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        1824,
+        864
+      ],
+      "id": "92f38ff0-4afd-4d11-a343-7fb92e7a6802",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "sortFieldsUi": {
+          "sortField": [
+            {
+              "fieldName": "Dispute Time"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.sort",
+      "typeVersion": 1,
+      "position": [
+        1616,
+        864
+      ],
+      "id": "c2b7d5b6-fbc2-4272-92d6-7447a50502fd",
+      "name": "Sort"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ",
+          "mode": "list",
+          "cachedResultName": "Arbitration",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1664223804,
+          "mode": "list",
+          "cachedResultName": "Cases",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ/edit#gid=1664223804"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Case ID": "={{ $('Limit').item.json[\"Case ID\"] }}",
+            "Status": "PROCESSING: Locked",
+            "Adjudication Time": "={{ $now }}"
+          },
+          "matchingColumns": [
+            "Case ID"
+          ],
+          "schema": [
+            {
+              "id": "Case ID",
+              "displayName": "Case ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller",
+              "displayName": "Seller",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer",
+              "displayName": "Buyer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Email",
+              "displayName": "Seller Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Email",
+              "displayName": "Buyer Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Token",
+              "displayName": "Seller Token",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Token",
+              "displayName": "Buyer Token",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Wallet",
+              "displayName": "Seller Wallet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Wallet",
+              "displayName": "Buyer Wallet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Contract Text",
+              "displayName": "Contract Text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Response",
+              "displayName": "Seller Response",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Response",
+              "displayName": "Buyer Response",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Folder Link",
+              "displayName": "Folder Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Escrow Address",
+              "displayName": "Escrow Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Escrow Fund",
+              "displayName": "Escrow Fund",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Fee",
+              "displayName": "Fee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Deposited Fund",
+              "displayName": "Deposited Fund",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Payment to Seller",
+              "displayName": "Payment to Seller",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Refund to Buyer",
+              "displayName": "Refund to Buyer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Tip to Seller",
+              "displayName": "Tip to Seller",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Withdrawal",
+              "displayName": "Buyer Withdrawal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Payment Request Time",
+              "displayName": "Payment Request Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Refund Request Time",
+              "displayName": "Refund Request Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Dispute Time",
+              "displayName": "Dispute Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Adjudication Time",
+              "displayName": "Adjudication Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Determination Time",
+              "displayName": "Determination Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Decision",
+              "displayName": "Decision",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Award",
+              "displayName": "Seller Award",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Award",
+              "displayName": "Buyer Award",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Payout",
+              "displayName": "Seller Payout",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Payout",
+              "displayName": "Buyer Payout",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Appeal Time",
+              "displayName": "Appeal Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "c63ba621-decc-4ce6-af76-2f592f3dc7fd",
+      "name": "Record Status",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        2064,
+        752
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8PyGKtbWRXXj7YKz",
+          "name": "Sheets: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "=Magistrate_{{$('Merge5').item.json['Case ID'] }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        2656,
+        1280
+      ],
+      "id": "963ee4a7-f4d4-4c2b-8cb2-3a142136db0e",
+      "name": "Case Record"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "bab18923-7ed1-4373-8788-a1eaefcfcff9",
+                    "leftValue": "={{$json.validation_status}}",
+                    "rightValue": "SUCCESS",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Success"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "0e941d8f-c198-4513-9d1a-52dca12f9e59",
+                    "leftValue": "={{$json.validation_status}}",
+                    "rightValue": "WARNING",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Warning"
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {
+          "fallbackOutput": "extra",
+          "ignoreCase": true,
+          "renameFallbackOutput": "Error",
+          "allMatchingOutputs": false
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        3392,
+        880
+      ],
+      "id": "938eb63d-8dab-4331-964d-b380942ec7a3",
+      "name": "Verification"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('File', ``, 'string') }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTool",
+      "typeVersion": 3,
+      "position": [
+        2848,
+        1280
+      ],
+      "id": "f3961582-40b7-4ba0-be0d-2e3175e3db86",
+      "name": "Access Files",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "DaYtvl0uWvCtS30q",
+          "name": "Drive: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Fetch data from public APIs and external sources to verify claims. Use for: tracking shipment status, verifying blockchain transactions, checking public records, or querying any HTTP-accessible data. Provide the full URL including query parameters.",
+        "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('URL', ``, 'string') }}",
+        "sendQuery": true,
+        "specifyQuery": "json",
+        "jsonQuery": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('JSON', ``, 'json') }}",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('JSON', ``, 'json') }}",
+        "options": {
+          "allowUnauthorizedCerts": true,
+          "redirect": {
+            "redirect": {}
+          },
+          "timeout": 10000
+        },
+        "optimizeResponse": true,
+        "dataField": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Field_Containing_Data', ``, 'string') }}"
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.3,
+      "position": [
+        2912,
+        1136
+      ],
+      "id": "580b54d3-27ef-428d-b598-9a25feb70e37",
+      "name": "External API"
+    },
+    {
+      "parameters": {
+        "mode": "chooseBranch",
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2288,
+        880
+      ],
+      "id": "e797d641-c578-47c8-944f-62d5c0d2bca0",
+      "name": "Merge5",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "content": "# Investigation and Judgement\n\n\n**Trigger:** Every one hour\nEach time it picks one disputed case to process and judge. \n\n  * First it gets all the disputed cases whose deadline has arrived. If none, it ends.\n  * Then picks the oldest one for investigation and judgement. \n  * Then it collects all the information, messages and evidence to prepare a case packet. \n  * Then it sends the packet to the AI Agent as the \"Magistrate Judge\" for discovery. \n  * The agent investigates the facts and claims to prepare a Case Report including a summary. \n  * The report is verified to conform to the required formatting structure and consistency. \n  * Then it sends the report to an LLM Chain as the \"Final Judge\" for ruling. \n  * The final judge issues a verdict based on the information in the report. \n  * The ruling is verified to conform to the required formatting structure and consistency.\n  * The ruling is emailed to both parties and stored in Google drive. \n  * The parties have 7 days to appeal if they notice any error in the ruling logic. \n  * If no appeal, after 7 days, the verdict is executed automatically. \n  * If either party appeals, it is sent to a human to inspect the ruling (HITL). \n\n\n\n\n",
+        "height": 1632,
+        "width": 5732,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        96,
+        240
+      ],
+      "typeVersion": 1,
+      "id": "060d3a4d-428b-4d63-8fe3-ea486bdf9952",
+      "name": "Sticky Note15"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "name": "magistrate_report_schema",
+              "schema": "{\n  \"type\": \"object\",\n  \"additionalProperties\": false,\n  \"properties\": {\n    \"caseId\": {\n      \"type\": \"string\",\n      \"description\": \"Unique identifier of the arbitration case.\"\n    },\n    \"escrow_balance\": {\n      \"type\": \"string\",\n      \"pattern\": \"^(0|[1-9][0-9]*)$\",\n      \"description\": \"Total escrow balance available for distribution, in Wei.\"\n    },\n    \"summary\": {\n      \"type\": \"string\",\n      \"description\": \"Neutral, comprehensive summary of the dispute and timeline. Minimum 200 characters.\"\n    },\n    \"facts\": {\n      \"type\": \"array\",\n      \"description\": \"Verified facts. Each must include a citation (e.g., 'Verified via File ID: abc123').\",\n      \"items\": { \"type\": \"string\" }\n    },\n    \"contradictions\": {\n      \"type\": \"array\",\n      \"description\": \"Specific conflicts between claims and evidence or between parties.\",\n      \"items\": { \"type\": \"string\" }\n    },\n    \"unsubstantiated_claims\": {\n      \"type\": \"array\",\n      \"description\": \"Claims that lack supporting evidence.\",\n      \"items\": { \"type\": \"string\" }\n    },\n    \"reasoning\": {\n      \"type\": \"string\",\n      \"description\": \"Explanation of how evidence leads to the payout recommendation. Minimum 200 characters.\"\n    },\n    \"recommended_buyer_payout\": {\n      \"type\": \"string\",\n      \"pattern\": \"^(0|[1-9][0-9]*)$\",\n      \"description\": \"Recommended payout to the buyer, in Wei.\"\n    },\n    \"recommended_seller_payout\": {\n      \"type\": \"string\",\n      \"pattern\": \"^(0|[1-9][0-9]*)$\",\n      \"description\": \"Recommended payout to the seller, in Wei.\"\n    }\n  },\n  \"required\": [\n    \"caseId\",\n    \"escrow_balance\",\n    \"summary\",\n    \"facts\",\n    \"contradictions\",\n    \"unsubstantiated_claims\",\n    \"reasoning\",\n    \"recommended_buyer_payout\",\n    \"recommended_seller_payout\"\n  ]\n}",
+              "strict": true
+            }
+          },
+          "temperature": 0,
+          "topP": 0.9
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        3008,
+        1392
+      ],
+      "id": "85fe06c4-1e40-43f8-8628-322d17d85bb7",
+      "name": "4o-mini: Report",
+      "notesInFlow": true,
+      "credentials": {
+        "openAiApi": {
+          "id": "mi9lM0OeaXWS7nw1",
+          "name": "OpenAi account"
+        }
+      },
+      "notes": "Context: 128K tokens"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ==========================================================\n// MAGISTRATE OUTPUT VALIDATION (CODE NODE VERSION)\n// This adds validation_status field to the output\n// Follow with a Switch node to route based on status\n// ==========================================================\n\nconst data = $input.first().json.output;\nconst errors = [];\nconst warnings = [];\n\n// ==========================================================\n// 1. REQUIRED FIELD VALIDATION\n// ==========================================================\nconst requiredFields = [\n  'caseId', 'escrow_balance', 'summary', 'facts',\n  'contradictions', 'unsubstantiated_claims', 'reasoning',\n  'recommended_buyer_payout', 'recommended_seller_payout'\n];\n\n\nrequiredFields.forEach(field => {\n  if (data[field] === undefined || data[field] === null || data[field] === '') {\n    errors.push(`Missing required field: ${field}`);\n  }\n});\n\n// ==========================================================\n// 2. WEI FORMAT VALIDATION\n// ==========================================================\nconst weiPattern = /^(0|[1-9][0-9]*)$/;\n\nif (!weiPattern.test(data.escrow_balance)) {\n  errors.push(`Invalid escrow_balance format: ${data.escrow_balance}`);\n}\n\nif (!weiPattern.test(data.recommended_buyer_payout)) {\n  errors.push(`Invalid recommended_buyer_payout format: ${data.recommended_buyer_payout}`);\n}\n\nif (!weiPattern.test(data.recommended_seller_payout)) {\n  errors.push(`Invalid recommended_seller_payout format: ${data.recommended_seller_payout}`);\n}\n\n// ==========================================================\n// 3. MATH VALIDATION\n// ==========================================================\ntry {\n  const escrow = BigInt(data.escrow_balance);\n  const buyerPayout = BigInt(data.recommended_buyer_payout);\n  const sellerPayout = BigInt(data.recommended_seller_payout);\n  \n  if (buyerPayout < 0n) {\n    errors.push(`Negative buyer payout: ${buyerPayout}`);\n  }\n  \n  if (sellerPayout < 0n) {\n    errors.push(`Negative seller payout: ${sellerPayout}`);\n  }\n  \n  const sum = buyerPayout + sellerPayout;\n  if (sum !== escrow) {\n    errors.push(`Math error: ${buyerPayout} + ${sellerPayout} = ${sum}, but escrow is ${escrow}`);\n  }\n\n  // if (escrow_balance !== escrow) {\n  //   errors.push(`Data error: escrow balance is ${buyerPayout}, but it uses ${escrow}`);\n  // }\n  \n  if (buyerPayout > escrow) {\n    errors.push(`Buyer payout exceeds escrow`);\n  }\n  \n  if (sellerPayout > escrow) {\n    errors.push(`Seller payout exceeds escrow`);\n  }\n  \n} catch (e) {\n  errors.push(`BigInt conversion error: ${e.message}`);\n}\n\n// ==========================================================\n// 3.5. MINIMUM CONTENT LENGTH VALIDATION (ERRORS)\n// ==========================================================\nif (!data.summary || data.summary.trim().length < 50) {\n  errors.push(`Summary is critically short - minimum 50 characters required`);\n}\n\nif (!data.reasoning || data.reasoning.trim().length < 50) {\n  errors.push(`Reasoning is critically short - minimum 50 characters required`);\n}\n\n// ==========================================================\n// 4. ARRAY VALIDATION\n// ==========================================================\nif (!Array.isArray(data.facts)) {\n  errors.push(`facts must be an array`);\n}\n\nif (!Array.isArray(data.contradictions)) {\n  errors.push(`contradictions must be an array`);\n}\n\nif (!Array.isArray(data.unsubstantiated_claims)) {\n  errors.push(`unsubstantiated_claims must be an array`);\n}\n\n// ==========================================================\n// 5. CONTENT QUALITY CHECKS (Warnings)\n// ==========================================================\nif (data.facts && data.facts.length === 0) {\n  warnings.push('No verified facts documented');\n} \n\n// Summary should be comprehensive (200-800 chars ideal)\nif (data.summary && data.summary.length < 200) {\n  warnings.push('Summary is quite brief (< 200 chars) - consider adding more context');\n}\n\nif (data.summary && data.summary.length > 2000) {\n  warnings.push('Summary is very long (> 1000 chars) - consider condensing');\n}\n\n// Reasoning should be thorough (300-1500 chars ideal)\nif (data.reasoning && data.reasoning.length < 200) {\n  warnings.push('Reasoning is brief (< 300 chars) - may lack sufficient detail for audit trail');\n}\n\nif (data.reasoning && data.reasoning.length > 2000) {\n  warnings.push('Reasoning is very long (> 2500 chars) - may contain unnecessary verbosity');\n}\n\n// ==========================================================\n// 6. GENERATE JUDGE PROMPT (MARKDOWN)\n// ==========================================================\nconst caseInfo = $('Merge5').first().json; \nconst timestamp = new Date().toISOString().replace('T', ' ').substring(0, 16);\nconst signed_time = new Date(caseInfo.Time).toISOString().replace('T', ' ').substring(0, 16);\n\nconst magistrateReport = `\n# CASE SUMMARY AND RECOMMENDATIONS\n\n**Case ID:** ${data.caseId} \n\n**Current Time:** ${timestamp} UTC  \n**Contract Signed:** ${signed_time} UTC   \n\n## Parties: \n- **Buyer:** ${caseInfo.Buyer} \n- **Seller:** ${caseInfo.Seller} \n\n\n## FINANCIALS (WEI)\n- **Escrow Balance:** ${data.escrow_balance}  \n- **Recommended Payout to Buyer:** ${data.recommended_buyer_payout}  \n- **Recommended Payout to Seller:** ${data.recommended_seller_payout}  \n\n\n## MAGISTRATE REPORT  \n\n- **Summary:** ${data.summary}  \n\n- **Facts:** ${(data.facts || []).join(' | ')}  \n\n- **Contradictions:** ${(data.contradictions || []).join(' | ')}  \n\n- **Unsubstantiated claims:** ${(data.unsubstantiated_claims || []).join(' | ')}  \n\n- **Reasoning:** ${data.reasoning}  \n\n\n## CONTRACT TEXT  \n\\`\\`\\`  \n${caseInfo[\"Contract Text\"]}  \n\\`\\`\\` \n\n`;\n\n// ==========================================================\n// 7. RETURN WITH PROMPT AND VALIDATION STATUS\n// ==========================================================\nreturn [{\n  json: {\n    magistrate_report: magistrateReport,\n    validation_status: errors.length > 0 ? 'ERROR' : (warnings.length > 0 ? 'WARNING' : 'SUCCESS'),\n    validation_errors: errors,\n    validation_warnings: warnings\n  }\n}]; \n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3104,
+        896
+      ],
+      "id": "70c5a1ba-5eb2-41be-a9a0-7920d8759ce1",
+      "name": "Validate Case Report"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "bab18923-7ed1-4373-8788-a1eaefcfcff9",
+                    "leftValue": "={{ $json.validationStatus }}",
+                    "rightValue": "SUCCESS",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Success"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "0e941d8f-c198-4513-9d1a-52dca12f9e59",
+                    "leftValue": "={{ $json.validationStatus }}",
+                    "rightValue": "WARNING",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Warning"
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {
+          "fallbackOutput": "extra",
+          "ignoreCase": true,
+          "renameFallbackOutput": "Error",
+          "allMatchingOutputs": false
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        4336,
+        880
+      ],
+      "id": "77882006-e66f-4f30-960d-ccc941a4f141",
+      "name": "Verification1"
+    },
+    {
+      "parameters": {
+        "name": "=",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Merge5').item.json['Folder Link'] }}",
+          "mode": "url"
+        },
+        "options": {
+          "propertiesUi": {
+            "propertyValues": [
+              {
+                "key": "role",
+                "value": "Magistrate"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        3712,
+        656
+      ],
+      "id": "59384ba1-9cd8-4116-9e7b-542bc20ca712",
+      "name": "Upload Report",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "DaYtvl0uWvCtS30q",
+          "name": "Drive: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"additionalProperties\": false,\n  \"properties\": {\n    \"caseId\": {\n      \"type\": \"string\",\n      \"description\": \"Unique identifier of the arbitration case.\"\n    },\n    \"escrow_balance\": {\n      \"type\": \"string\",\n      \"pattern\": \"^(0|[1-9][0-9]*)$\",\n      \"description\": \"Total escrow balance available for distribution, in Wei.\"\n    },\n    \"summary\": {\n      \"type\": \"string\",\n      \"description\": \"Neutral, comprehensive summary of the dispute and timeline. Minimum 200 characters.\"\n    },\n    \"facts\": {\n      \"type\": \"array\",\n      \"description\": \"Verified facts. Each must include a citation (e.g., 'Verified via File ID: abc123').\",\n      \"items\": { \"type\": \"string\" }\n    },\n    \"contradictions\": {\n      \"type\": \"array\",\n      \"description\": \"Specific conflicts between claims and evidence or between parties.\",\n      \"items\": { \"type\": \"string\" }\n    },\n    \"unsubstantiated_claims\": {\n      \"type\": \"array\",\n      \"description\": \"Claims that lack supporting evidence.\",\n      \"items\": { \"type\": \"string\" }\n    },\n    \"reasoning\": {\n      \"type\": \"string\",\n      \"description\": \"Explanation of how evidence leads to the payout recommendation. Minimum 200 characters.\"\n    },\n    \"recommended_buyer_payout\": {\n      \"type\": \"string\",\n      \"pattern\": \"^(0|[1-9][0-9]*)$\",\n      \"description\": \"Recommended payout to the buyer, in Wei.\"\n    },\n    \"recommended_seller_payout\": {\n      \"type\": \"string\",\n      \"pattern\": \"^(0|[1-9][0-9]*)$\",\n      \"description\": \"Recommended payout to the seller, in Wei.\"\n    }\n  },\n  \"required\": [\n    \"caseId\",\n    \"escrow_balance\",\n    \"summary\",\n    \"facts\",\n    \"contradictions\",\n    \"unsubstantiated_claims\",\n    \"reasoning\",\n    \"recommended_buyer_payout\",\n    \"recommended_seller_payout\"\n  ]\n}",
+        "autoFix": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        3008,
+        1232
+      ],
+      "id": "bd8ce07d-a372-49c2-9000-7148b797beef",
+      "name": "Structured Report"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Merge5').item.json['Seller Email'] }}",
+        "subject": "=Final Determination for Case {{ $json['Case ID'] }}",
+        "message": "=<div style=\"font-family: 'Segoe UI', Arial, sans-serif; color: #2d3748; max-width: 600px; margin: auto; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;\">\n  \n  <div style=\"background-color: #1a365d; color: white; padding: 24px; text-align: center;\">\n    <h1 style=\"margin: 0; font-size: 20px; text-transform: uppercase;\">Official Arbitration Determination</h1>\n    <p style=\"margin: 4px 0 0; opacity: 0.8; font-size: 14px;\">Case ID: #{{ $json['Case ID'] }}</p>\n  </div>\n\n  <div style=\"padding: 32px;\">\n    <div style=\"text-align: center; background-color: #f7fafc; border: 1px solid #edf2f7; padding: 20px; border-radius: 6px; margin-bottom: 24px;\">\n      <span style=\"display: block; font-size: 11px; color: #718096; font-weight: bold; text-transform: uppercase; margin-bottom: 8px;\">Final Determination</span>\n      <div style=\"font-size: 20px; font-weight: bold; color: #2c5282; line-height: 1.4;\">{{ $json.Decision }}</div>\n    </div>\n\n    <table style=\"width: 100%; border-collapse: collapse; margin-bottom: 24px;\">\n      <tr style=\"border-bottom: 2px solid #edf2f7;\">\n        <th style=\"text-align: left; padding: 12px; font-size: 13px; color: #4a5568;\">Beneficiary</th>\n        <th style=\"text-align: right; padding: 12px; font-size: 13px; color: #4a5568;\">Award Amount</th>\n      </tr>\n      <tr style=\"border-bottom: 1px solid #edf2f7;\">\n        <td style=\"padding: 12px; font-size: 14px;\">Buyer</td>\n        <td style=\"padding: 12px; text-align: right; font-weight: bold; font-size: 14px;\">{{ ( $json['Buyer Award'] / 1e18).toFixed(4) }} ETH</td>\n      </tr>\n      <tr style=\"border-bottom: 1px solid #edf2f7;\">\n        <td style=\"padding: 12px; font-size: 14px;\">Seller</td>\n        <td style=\"padding: 12px; text-align: right; font-weight: bold; font-size: 14px;\">{{ ( $json['Seller Award'] / 1e18).toFixed(4) }} ETH</td>\n      </tr>\n    </table>\n    <div style=\"font-size: 11px; color: #a0aec0; margin-bottom: 32px;\">\n * A valid Ethereum wallet address is required for the distribution of the award.\n    </div>\n\n    <h3 style=\"font-size: 15px; margin-bottom: 8px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;\">Rationale</h3>\n    <p style=\"font-size: 14px; line-height: 1.6; color: #4a5568; margin-bottom: 12px;\">{{ $('Verification1').item.json.rationale }}</p>\n\n    <div style=\"font-size: 11px; color: #a0aec0; margin-bottom: 32px;\">\n      Confidence Level: {{ ( $('Verification1').item.json.confidence * 100).toFixed(1) }}%\n    </div>\n\n    <div style=\"padding-top: 24px; border-top: 1px solid #edf2f7; text-align: center;\">\n      <p style=\"font-size: 13px; color: #718096; margin-bottom: 16px;\">\n        Error in the process or logic of judgement?<br>\nYou may file a <strong>Procedural Objection within 7 days</strong>.\n        <br><span style=\"font-size: 11px;\">(No new evidence or argument is permitted)</span>\n      </p>\n      <a href=\"{{ $vars.BASE_URL }}form{{$execution.mode === \"production\" ? \"\" : \"-test\"}}/appeal?caseId={{ $json['Case ID'] }}&party=Seller&token={{ $('Get Disputed Cases').item.json['Seller Token'] }}\"\n\nstyle=\"background-color: #ffffff; color: #2d3748; border: 1px solid #cbd5e0; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-size: 13px; font-weight: bold; display: inline-block;\">\n        File Procedural Objection\n      </a>\n    </div>\n  </div>\n\n  <div style=\"background-color: #f8f9fa; padding: 16px; text-align: center; font-size: 10px; color: #a0aec0; border-top: 1px solid #e2e8f0;\">\n    Legally binding automated ruling. <p>[Seller's copy]</p>\n Sent on: {{ new Date().toUTCString() }}\n  </div>\n<p style=\"margin-top: 30px; text-align: center;\">\n  <span style=\"font-size: 11px; color: #888888; font-family: sans-serif; letter-spacing: 0.5px;\">\n    AI Arbitration Platform\n  </span>\n</p>\n</div>",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "AI Arbitration Platform"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        4912,
+        752
+      ],
+      "id": "b94a9cd6-9d59-4d3d-b9ac-f7b34061bc8c",
+      "name": "Determination to Seller",
+      "webhookId": "717eaf70-3734-4e5e-843f-719266940413",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ANRO7cdYCJKI7fae",
+          "name": "Gmail: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Merge5').item.json['Buyer Email'] }}",
+        "subject": "=Final Determination for Case {{ $json['Case ID'] }}",
+        "message": "=<div style=\"font-family: 'Segoe UI', Arial, sans-serif; color: #2d3748; max-width: 600px; margin: auto; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;\">\n  \n  <div style=\"background-color: #1a365d; color: white; padding: 24px; text-align: center;\">\n    <h1 style=\"margin: 0; font-size: 20px; text-transform: uppercase;\">Official Arbitration Determination</h1>\n    <p style=\"margin: 4px 0 0; opacity: 0.8; font-size: 14px;\">Case ID: #{{ $json['Case ID'] }}</p>\n  </div>\n\n  <div style=\"padding: 32px;\">\n    <div style=\"text-align: center; background-color: #f7fafc; border: 1px solid #edf2f7; padding: 20px; border-radius: 6px; margin-bottom: 24px;\">\n      <span style=\"display: block; font-size: 11px; color: #718096; font-weight: bold; text-transform: uppercase; margin-bottom: 8px;\">Final Determination</span>\n      <div style=\"font-size: 20px; font-weight: bold; color: #2c5282; line-height: 1.4;\">{{ $json.Decision }}</div>\n    </div>\n\n    <table style=\"width: 100%; border-collapse: collapse; margin-bottom: 24px;\">\n      <tr style=\"border-bottom: 2px solid #edf2f7;\">\n        <th style=\"text-align: left; padding: 12px; font-size: 13px; color: #4a5568;\">Beneficiary</th>\n        <th style=\"text-align: right; padding: 12px; font-size: 13px; color: #4a5568;\">Award Amount</th>\n      </tr>\n      <tr style=\"border-bottom: 1px solid #edf2f7;\">\n        <td style=\"padding: 12px; font-size: 14px;\">Buyer</td>\n        <td style=\"padding: 12px; text-align: right; font-weight: bold; font-size: 14px;\">{{ ( $json['Buyer Award'] / 1e18).toFixed(4) }} ETH</td>\n      </tr>\n      <tr style=\"border-bottom: 1px solid #edf2f7;\">\n        <td style=\"padding: 12px; font-size: 14px;\">Seller</td>\n        <td style=\"padding: 12px; text-align: right; font-weight: bold; font-size: 14px;\">{{ ( $json['Seller Award'] / 1e18).toFixed(4) }} ETH</td>\n      </tr>\n    </table>\n    <div style=\"font-size: 11px; color: #a0aec0; margin-bottom: 32px;\">\n * A valid Ethereum wallet address is required for the distribution of the award.\n    </div>\n\n    <h3 style=\"font-size: 15px; margin-bottom: 8px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px;\">Rationale</h3>\n    <p style=\"font-size: 14px; line-height: 1.6; color: #4a5568; margin-bottom: 12px;\">{{ $('Verification1').item.json.rationale }}</p>\n\n    <div style=\"font-size: 11px; color: #a0aec0; margin-bottom: 32px;\">\n      Confidence Level: {{ ( $('Verification1').item.json.confidence * 100).toFixed(1) }}%\n    </div>\n\n    <div style=\"padding-top: 24px; border-top: 1px solid #edf2f7; text-align: center;\">\n      <p style=\"font-size: 13px; color: #718096; margin-bottom: 16px;\">\n        Error in the process or logic of judgement?<br>\nYou may file a <strong>Procedural Objection within 7 days</strong>.\n        <br><span style=\"font-size: 11px;\">(No new evidence or argument is permitted)</span>\n      </p>\n      <a href=\"{{$vars.BASE_URL}}form{{$execution.mode === \"production\" ? \"\" : \"-test\"}}/appeal?caseId={{ $json['Case ID'] }}&party=Buyer&token={{$('Get Disputed Cases').item.json['Buyer Token'] }}\"\" style=\"background-color: #ffffff; color: #2d3748; border: 1px solid #cbd5e0; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-size: 13px; font-weight: bold; display: inline-block;\">\n        File Procedural Objection\n      </a>\n    </div>\n  </div>\n\n  <div style=\"background-color: #f8f9fa; padding: 16px; text-align: center; font-size: 10px; color: #a0aec0; border-top: 1px solid #e2e8f0;\">\n    Legally binding automated ruling. <p>[Buyer's Copy]</p>\nSent on: {{ new Date().toUTCString() }}\n  </div>\n<p style=\"margin-top: 30px; text-align: center;\">\n  <span style=\"font-size: 11px; color: #888888; font-family: sans-serif; letter-spacing: 0.5px;\">\n    AI Arbitration Platform\n  </span>\n</p>\n</div>",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "AI Arbitration Platform"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        4912,
+        960
+      ],
+      "id": "d975f446-d439-44b7-922f-8d939b565ec2",
+      "name": "Determination to Buyer",
+      "webhookId": "717eaf70-3734-4e5e-843f-719266940413",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ANRO7cdYCJKI7fae",
+          "name": "Gmail: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.magistrate_report }}\n---  \n**Issue your final ruling in JSON format.**",
+        "hasOutputParser": true,
+        "needsFallback": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You are the Final Judge issuing legally binding rulings in an arbitration system.  \n\n\n## AUTHORITY & CONSTRAINTS\n\nYou may approve, modify, or reject the Magistrate's recommendation. You must:\n- Distribute exactly the escrow balance (no more, no less)\n- Use non-negative Wei integers only (as strings)\n- Justify any deviation from the Magistrate's recommendation\n- Base decisions solely on the provided report (no new evidence, no invented facts)  \n\n\n## LEGAL PRINCIPLES\n\n- Both parties bear equal burden of proof.  \n- Apply contract law; honor explicit obligations.  \n- When evidence conflicts, favor documented proof over verbal claims.  \n- Remain strictly neutral.    \n\n\n## REVIEW CHECKLIST\n\n1. **Math:** Ensure buyer_payout + seller_payout == escrow_balance.  \n2. **Evidence:** Confirm reasoning aligns with verified facts and contract terms; weigh contradictions.  \n3. **Fairness:** Ensure split reflects evidence and contract terms.\n4. **Finality:** This is irreversible; your decision executes immediately.  \n\n\n## CRITICAL RULES\n\n- All payouts must be non-negative Wei integers as strings.\n- Sum of buyer_payout and seller_payout MUST equal escrow_balance exactly.  \n- All amounts ≥ 0, no decimals, no rounding.    \n- Use ONLY the escrow balance provided (no fund creation/destruction).  \n- No new investigation—rely solely on Magistrate's report.  \n- Output ONLY valid JSON matching the schema (no extra commentary)."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        3712,
+        896
+      ],
+      "id": "899316ba-9965-4a80-88c2-a8ffa8f9302a",
+      "name": "Final Judge"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Setup Data Sources with safe fallbacks\nconst judgeData = $input.first().json.output || {};\nconst magistrateData = $('Magistrate Judge').first().json.output || {};\nconst errors = [];\nconst warnings = [];\n\n// 2. Required Field Validation\nconst requiredFields = [\n  'caseId', 'decision', 'escrow_balance',\n  'seller_award', 'buyer_award', \n  'rationale', 'confidence'\n];\n\nrequiredFields.forEach(field => {\n  if (!judgeData[field] && judgeData[field] !== 0) {\n    errors.push(`Missing required field: ${field}`);\n  }\n});\n\n// 3. Case & Escrow Consistency\nif (String(judgeData.caseId) !== String(magistrateData.caseId)) {\n  errors.push(`Case ID mismatch: Judge (${judgeData.caseId}) vs Magistrate (${magistrateData.caseId})`);\n}\n\nif (String(judgeData.escrow_balance) !== String(magistrateData.escrow_balance)) {\n  errors.push(`Escrow mismatch: Judge (${judgeData.escrow_balance}) vs Magistrate (${magistrateData.escrow_balance})`);\n}\n\n// 4. Content Length & Quality\nconst decisionLen = (judgeData.decision || '').length;\nif (decisionLen < 10) {\n  errors.push(\"Determination text too short.\");\n} else if (decisionLen < 50) {\n  warnings.push(`Determination is short: ${decisionLen} characters.`);\n} else if (decisionLen > 1000) {\n  warnings.push(`Determination is long: ${decisionLen} characters.`);\n}\n\nconst rationaleLen = (judgeData.rationale || '').length;\nif (rationaleLen < 100) {\n  errors.push(\"Rationale lacks sufficient detail.\");\n} else if (rationaleLen < 200) {\n  warnings.push(`Rationale is short: ${rationaleLen} characters.`);\n} else if (rationaleLen > 2000) {\n  warnings.push(`Rationale is very long: ${rationaleLen} characters.`);\n}\n\n// 5. Format & Math Validation (BigInt for Wei)\nconst weiPattern = /^(0|[1-9][0-9]*)$/;\n['escrow_balance', 'seller_award', 'buyer_award'].forEach(key => {\n  if (!weiPattern.test(String(judgeData[key] || ''))) {\n    errors.push(`Invalid Wei format for ${key}: ${judgeData[key]}`);\n  }\n});\n\ntry {\n  const escrow = BigInt(judgeData.escrow_balance || 0);\n  const sellerAward = BigInt(judgeData.seller_award || 0);\n  const buyerAward = BigInt(judgeData.buyer_award || 0);\n  const totalAwarded = sellerAward + buyerAward;\n\n  if (sellerAward < 0n || buyerAward < 0n) errors.push(\"Negative award values detected.\");\n  if (totalAwarded !== escrow) {\n    errors.push(`Math Error: Awards (${totalAwarded}) do not match Escrow (${escrow})`);\n  }\n} catch (e) {\n  errors.push(`Calculation Error: ${e.message}`);\n}\n\n// 6. Generate Final Markdown Report\nconst timestamp = new Date().toISOString().replace('T', ' ').substring(0, 16);\nconst confidencePct = judgeData.confidence ? (judgeData.confidence * 100).toFixed(0) : \"0\";\n\nconst finalDeterminationHtml = `\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <style>\n        body { font-family: 'Times New Roman', serif; line-height: 1.6; color: #333; max-width: 800px; margin: 40px auto; padding: 50px; border: 1px solid #ccc; box-shadow: 0 0 10px rgba(0,0,0,0.05); }\n        .header { text-align: center; border-bottom: 2px solid #2c3e50; margin-bottom: 30px; padding-bottom: 10px; }\n        h1 { color: #2c3e50; font-size: 24px; text-transform: uppercase; }\n        h2 { color: #2c3e50; font-size: 18px; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 30px; }\n        .decision { background: #f8f9fa; padding: 15px; border-left: 4px solid #2c3e50; font-weight: bold; margin: 15px 0; }\n        ul { list-style-type: none; padding: 0; }\n        li { margin-bottom: 8px; font-size: 15px; }\n        .footer { margin-top: 40px; font-size: 13px; color: #7f8c8d; border-top: 1px solid #eee; padding-top: 15px; text-align: center; }\n        .print-btn { display: block; margin: 30px auto 0; padding: 10px 20px; background: #2c3e50; color: #fff; border: none; border-radius: 4px; cursor: pointer; }\n        @media print { .print-btn { display: none; } body { border: none; box-shadow: none; margin: 0; padding: 20px; } }\n    </style>\n</head>\n<body>\n    <div class=\"header\">\n        <h1>FINAL DETERMINATION - CASE #${judgeData.caseId || 'N/A'}</h1>\n        <p><strong>Date Issued:</strong> ${timestamp} UTC</p>\n    </div>\n\n    <h2>⚖️ DECISION</h2>\n    <div class=\"decision\">\n        ${judgeData.decision || 'No decision provided.'}\n    </div>\n\n    <h2>💰 FINANCIAL AWARDS (WEI)</h2>\n    <ul>\n        <li><strong>Total Escrow Balance:</strong> ${judgeData.escrow_balance || '0'}</li>\n        <li><strong>Awarded to Buyer:</strong> ${judgeData.buyer_award || '0'}</li>\n        <li><strong>Awarded to Seller:</strong> ${judgeData.seller_award || '0'}</li>\n    </ul>\n\n    <h2>📝 RATIONALE</h2>\n    <p>${judgeData.rationale || 'No rationale provided.'}</p>\n\n    <div class=\"footer\">\n        <p><em>AI Confidence Score: ${confidencePct}%</em></p>\n    </div>\n\n    <button class=\"print-btn\" onclick=\"window.print()\">Print to PDF</button>\n</body>\n</html>\n`;\n\n// 7. Final Output\nreturn [{\n  json: {\n    ...judgeData,\n    finalDeterminationHtml,\n    validationStatus: errors.length > 0 ? 'ERROR' : (warnings.length > 0 ? 'WARNING' : 'SUCCESS'),\n    validationErrors: errors,\n    validationWarnings: warnings\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4064,
+        896
+      ],
+      "id": "ba09d027-140a-42dd-a160-c21fc916c953",
+      "name": "Validate Determination"
+    },
+    {
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "magistrate_report_html",
+        "options": {
+          "addBOM": false,
+          "encoding": "utf8",
+          "fileName": "=MagistrateReport_{{$now.format('yyyy-MM-dd_HH-mm')}}.html"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        3552,
+        656
+      ],
+      "id": "cc17ef6b-4eaf-4fa4-8395-d37a640fccb1",
+      "name": "Report MD File"
+    },
+    {
+      "parameters": {
+        "name": "=",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Merge5').item.json['Folder Link'] }}",
+          "mode": "url"
+        },
+        "options": {
+          "propertiesUi": {
+            "propertyValues": [
+              {
+                "key": "role",
+                "value": "Judge"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        4544,
+        656
+      ],
+      "id": "fe96bdf1-0d24-4a9b-a175-771fc86e0e68",
+      "name": "Upload Determination",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "DaYtvl0uWvCtS30q",
+          "name": "Drive: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"additionalProperties\": false,\n  \"properties\": {\n\n    \"caseId\": {\n      \"type\": \"string\",\n      \"description\": \"Unique identifier of the arbitration case.\"\n    },\n    \n    \"decision\": {\n      \"type\": \"string\",\n      \"description\": \"A clear, conclusive verdict. Avoid vague or open-ended language.\"\n    },\n\n    \"escrow_balance\": {\n      \"type\": \"string\",\n      \"pattern\": \"^(0|[1-9][0-9]*)$\",\n      \"description\": \"Total escrow balance available for distribution in Wei (Integer string).\"\n    },\n\n    \"seller_award\": {\n      \"type\": \"string\",\n      \"pattern\": \"^(0|[1-9][0-9]*)$\",\n      \"description\": \"Amount awarded to seller in Wei (Integer string).\"\n    },\n\n    \"buyer_award\": {\n      \"type\": \"string\",\n      \"pattern\": \"^(0|[1-9][0-9]*)$\",\n      \"description\": \"Amount awarded to buyer in Wei (Integer string).\"\n    },\n\n    \"rationale\": {\n      \"type\": \"string\",\n      \"description\": \"Detailed judicial explanation referencing evidence and facts. Minimum 100 characters.\"\n    },\n\n    \"confidence\": {\n      \"type\": \"number\",\n      \"minimum\": 0,\n      \"maximum\": 1,\n      \"description\": \"Judge confidence score.\"\n    }\n\n  },\n\n  \"required\": [\n    \"caseId\", \n    \"decision\",\n    \"escrow_balance\",\n    \"seller_award\",\n    \"buyer_award\",\n    \"rationale\",\n    \"confidence\"\n  ]\n}",
+        "autoFix": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        4128,
+        1200
+      ],
+      "id": "0e529476-062e-4f3e-8f71-f57260eef91d",
+      "name": "Structured Determination"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "name": "judge_ruling_schema",
+              "schema": "{\n  \"type\": \"object\",\n  \"additionalProperties\": false,\n  \"properties\": {\n\n    \"caseId\": {\n      \"type\": \"string\",\n      \"description\": \"Unique identifier of the arbitration case.\"\n    },\n    \n    \"decision\": {\n      \"type\": \"string\",\n      \"description\": \"A clear, conclusive verdict. Avoid vague or open-ended language.\"\n    },\n\n    \"escrow_balance\": {\n      \"type\": \"string\",\n      \"pattern\": \"^(0|[1-9][0-9]*)$\",\n      \"description\": \"Total escrow balance available for distribution in Wei (Integer string).\"\n    },\n\n    \"seller_award\": {\n      \"type\": \"string\",\n      \"pattern\": \"^(0|[1-9][0-9]*)$\",\n      \"description\": \"Amount awarded to seller in Wei (Integer string).\"\n    },\n\n    \"buyer_award\": {\n      \"type\": \"string\",\n      \"pattern\": \"^(0|[1-9][0-9]*)$\",\n      \"description\": \"Amount awarded to buyer in Wei (Integer string).\"\n    },\n\n    \"rationale\": {\n      \"type\": \"string\",\n      \"description\": \"Detailed judicial explanation referencing evidence and facts. Minimum 100 characters.\"\n    },\n\n    \"confidence\": {\n      \"type\": \"number\",\n      \"minimum\": 0,\n      \"maximum\": 1,\n      \"description\": \"Judge confidence score.\"\n    }\n\n  },\n\n  \"required\": [\n    \"caseId\", \n    \"decision\",\n    \"escrow_balance\",\n    \"seller_award\",\n    \"buyer_award\",\n    \"rationale\",\n    \"confidence\"\n  ]\n}",
+              "strict": true
+            }
+          },
+          "temperature": 0,
+          "topP": 0.9
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        4128,
+        1376
+      ],
+      "id": "b54db619-e28e-490c-a5c2-f4b4003a58af",
+      "name": "4o-mini: Determination",
+      "notesInFlow": true,
+      "credentials": {
+        "openAiApi": {
+          "id": "mi9lM0OeaXWS7nw1",
+          "name": "OpenAi account"
+        }
+      },
+      "notes": "Context: 128K tokens"
+    },
+    {
+      "parameters": {
+        "sendTo": "=ceo@texasbc.org",
+        "subject": "={{ $json.subject }}",
+        "message": "={{ $json.htmlBody }}",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "Automated Arbitration System"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        3888,
+        1296
+      ],
+      "id": "b1c642a8-be6b-404d-bc2f-73dfe7cf2ed1",
+      "name": "Admin: Report Error ",
+      "webhookId": "717eaf70-3734-4e5e-843f-719266940413",
+      "executeOnce": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ANRO7cdYCJKI7fae",
+          "name": "Gmail: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\nconst report = data.magistrate_report || '';\n\n// 1. Extract values directly from the markdown string\nconst caseIdMatch = report.match(/Case ID:\\*\\*\\s*(\\d+)/);\nconst caseId = caseIdMatch ? caseIdMatch[1] : 'UNKNOWN';\n\nconst escrowMatch = report.match(/Escrow Balance:\\*\\*\\s*(-?\\d+)/);\nconst buyerMatch = report.match(/Recommended Payout to Buyer:\\*\\*\\s*(-?\\d+)/);\nconst sellerMatch = report.match(/Recommended Payout to Seller:\\*\\*\\s*(-?\\d+)/);\n\nconst escrowWei = escrowMatch ? parseFloat(escrowMatch[1]) : 0;\nconst buyerWei = buyerMatch ? parseFloat(buyerMatch[1]) : 0;\nconst sellerWei = sellerMatch ? parseFloat(sellerMatch[1]) : 0;\n\n// 2. Financial Conversion (Wei to ETH)\nconst escrowEth = (escrowWei / 1e18).toFixed(4);\nconst bEth = (buyerWei / 1e18).toFixed(4);\nconst sEth = (sellerWei / 1e18).toFixed(4);\n\n// 3. Format Lists\nconst errItems = (data.validation_errors || []).map(e => `<li>${e}</li>`).join('');\nconst warnItems = (data.validation_warnings || []).map(w => `<li>${w}</li>`).join('');\n\n// 4. Email Logic\nconst isError = data.validation_status === 'ERROR' || (data.validation_errors || []).length > 0;\nconst color = isError ? '#e53e3e' : '#ed6c02';\nconst label = isError ? 'MAGISTRATE VALIDATION FAILED' : 'MAGISTRATE WARNING';\n\nconst htmlBody = `\n<div style=\"font-family: sans-serif; border: 2px solid ${color}; max-width: 600px; border-radius: 8px; overflow: hidden;\">\n  <div style=\"background-color: ${color}; color: white; padding: 20px; text-align: center;\">\n    <h2 style=\"margin: 0;\">${label}</h2>\n    <p style=\"margin: 5px 0 0;\">Case ID: #${caseId}</p>\n  </div>\n  <div style=\"padding: 20px;\">\n    ${errItems ? `<h3 style=\"color: #c53030; margin-top: 0;\">Critical Errors</h3><ul>${errItems}</ul>` : ''}\n    ${warnItems ? `<h3 style=\"color: #ed6c02;\">Warnings</h3><ul>${warnItems}</ul>` : ''}\n    \n    <div style=\"background: #f7fafc; padding: 15px; border-radius: 4px; margin-top: 20px;\">\n      <h4 style=\"margin: 0 0 10px; color: #4a5568; font-size: 12px; text-transform: uppercase;\">Draft Financials</h4>\n      <p style=\"margin: 5px 0;\"><strong>Escrow Balance:</strong> ${escrowEth} ETH <span style=\"font-size: 11px; color: #a0aec0;\">(${escrowWei} WEI)</span></p>\n      <p style=\"margin: 5px 0;\"><strong>Buyer Payout:</strong> ${bEth} ETH <span style=\"font-size: 11px; color: #a0aec0;\">(${buyerWei} WEI)</span></p>\n      <p style=\"margin: 5px 0;\"><strong>Seller Payout:</strong> ${sEth} ETH <span style=\"font-size: 11px; color: #a0aec0;\">(${sellerWei} WEI)</span></p>\n    </div>\n    \n    <hr style=\"border: 0; border-top: 1px solid #eee; margin: 20px 0;\">\n    <h4 style=\"margin: 0 0 10px; color: #4a5568; font-size: 12px; text-transform: uppercase;\">Report Preview</h4>\n    <div style=\"font-size: 12px; color: #718096; white-space: pre-wrap; background: #fdfdfd; padding: 10px; border: 1px solid #e2e8f0;\">${report.substring(0, 500)}...</div>\n  </div>\n</div>\n`;\n\nreturn {\n  htmlBody,\n  subject: `${isError ? '🛑' : '⚠️'} ${label}: #${caseId}`\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3696,
+        1296
+      ],
+      "id": "77edae1d-b66c-43a6-8c11-98e331fa9d6e",
+      "name": "Generate Error Email"
+    },
+    {
+      "parameters": {
+        "mode": "markdownToHtml",
+        "markdown": "={{ $json.magistrate_report }}",
+        "destinationKey": "=magistrate_report_html",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.markdown",
+      "typeVersion": 1,
+      "position": [
+        3392,
+        656
+      ],
+      "id": "7ad4545b-366c-47d8-a687-9f32ab0ec437",
+      "name": "Markdown"
+    },
+    {
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "finalDeterminationHtml",
+        "options": {
+          "addBOM": false,
+          "encoding": "utf8",
+          "fileName": "=FinalDetermination_{{$now.format('yyyy-MM-dd_HH-mm')}}.html"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        4336,
+        656
+      ],
+      "id": "31765843-2094-4daf-b938-82966069d7d1",
+      "name": "Determination HTML File"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ",
+          "mode": "list",
+          "cachedResultName": "Arbitration",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1664223804,
+          "mode": "list",
+          "cachedResultName": "Cases",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ/edit#gid=1664223804"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Case ID": "={{ $json.caseId }}",
+            "Status": "DECIDED: Locked",
+            "Determination Time": "={{ $now }}",
+            "Decision": "={{ $json.decision }}",
+            "Seller Award": "={{ $json.seller_award }}",
+            "Buyer Award": "={{ $json.buyer_award }}"
+          },
+          "matchingColumns": [
+            "Case ID"
+          ],
+          "schema": [
+            {
+              "id": "Case ID",
+              "displayName": "Case ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller",
+              "displayName": "Seller",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer",
+              "displayName": "Buyer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Email",
+              "displayName": "Seller Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Email",
+              "displayName": "Buyer Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Token",
+              "displayName": "Seller Token",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Token",
+              "displayName": "Buyer Token",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Wallet",
+              "displayName": "Seller Wallet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Wallet",
+              "displayName": "Buyer Wallet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Contract Text",
+              "displayName": "Contract Text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Response",
+              "displayName": "Seller Response",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Response",
+              "displayName": "Buyer Response",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Folder Link",
+              "displayName": "Folder Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Escrow Address",
+              "displayName": "Escrow Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Escrow Fund",
+              "displayName": "Escrow Fund",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Fee",
+              "displayName": "Fee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Deposited Fund",
+              "displayName": "Deposited Fund",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Payment to Seller",
+              "displayName": "Payment to Seller",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Refund to Buyer",
+              "displayName": "Refund to Buyer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Tip to Seller",
+              "displayName": "Tip to Seller",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Withdrawal",
+              "displayName": "Buyer Withdrawal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Payment Request Time",
+              "displayName": "Payment Request Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Refund Request Time",
+              "displayName": "Refund Request Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Dispute Time",
+              "displayName": "Dispute Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Adjudication Time",
+              "displayName": "Adjudication Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Determination Time",
+              "displayName": "Determination Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Decision",
+              "displayName": "Decision",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Seller Award",
+              "displayName": "Seller Award",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Buyer Award",
+              "displayName": "Buyer Award",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Seller Payout",
+              "displayName": "Seller Payout",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Payout",
+              "displayName": "Buyer Payout",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Appeal Time",
+              "displayName": "Appeal Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "346a58a9-ad6d-4b1c-8ae5-5ecba41df581",
+      "name": "Record Determination",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        4640,
+        864
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8PyGKtbWRXXj7YKz",
+          "name": "Sheets: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\n\n// 1. Format Lists\nconst errItems = (data.validationErrors || []).map(e => `<li>${e}</li>`).join('');\nconst warnItems = (data.validationWarnings || []).map(w => `<li>${w}</li>`).join('');\n\n// 2. Financial Conversion (Wei to ETH) using 10^18\nconst bEth = (parseFloat(data.buyer_award || 0) / 1e18).toFixed(4);\nconst sEth = (parseFloat(data.seller_award || 0) / 1e18).toFixed(4);\n\n// 3. Email Logic\nconst isError = (data.validationErrors || []).length > 0;\nconst color = isError ? '#e53e3e' : '#ed6c02';\nconst label = isError ? 'RULING FAILED' : 'RULING WARNING';\n\nconst htmlBody = `\n<div style=\"font-family: sans-serif; border: 2px solid ${color}; max-width: 600px; border-radius: 8px; margin: auto; overflow: hidden; color: #2d3748;\">\n  <div style=\"background-color: ${color}; color: white; padding: 20px; text-align: center;\">\n    <h2 style=\"margin: 0; letter-spacing: 1px;\">${label}</h2>\n    <p style=\"margin: 5px 0 0; opacity: 0.9;\">Case ID: #${data.caseId || 'UNKNOWN'}</p>\n  </div>\n  <div style=\"padding: 20px;\">\n    ${errItems ? `<h3 style=\"color: #c53030; margin-top: 0;\">Critical Errors</h3><ul style=\"padding-left: 20px;\">${errItems}</ul>` : ''}\n    ${warnItems ? `<h3 style=\"color: #ed6c02;\">Warnings</h3><ul style=\"padding-left: 20px;\">${warnItems}</ul>` : ''}\n    \n    <div style=\"background: #f7fafc; padding: 15px; border-radius: 4px; border: 1px solid #edf2f7; margin-top: 20px;\">\n      <h4 style=\"margin: 0 0 10px; color: #4a5568; font-size: 11px; text-transform: uppercase;\">Draft Financials</h4>\n      <p style=\"margin: 5px 0;\"><strong>Buyer Payout:</strong> ${bEth} ETH</p>\n      <p style=\"margin: 5px 0;\"><strong>Seller Payout:</strong> ${sEth} ETH</p>\n      <p style=\"margin: 15px 0 5px;\"><strong>Decision:</strong> ${data.decision}</p>\n    </div>\n    \n    <hr style=\"border: 0; border-top: 1px solid #eee; margin: 20px 0;\">\n    <p style=\"font-size: 13px; line-height: 1.5;\"><strong>Rationale:</strong> ${data.rationale}</p>\n  </div>\n</div>\n`;\n\nreturn {\n  htmlBody,\n  subject: `${isError ? '🛑' : '⚠️'} ${label}: #${data.caseId || 'N/A'}`\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4640,
+        1136
+      ],
+      "id": "0ddffd27-381a-4543-87b1-644dd185eeec",
+      "name": "Generate Email: Determination Error"
+    },
+    {
+      "parameters": {
+        "sendTo": "=ceo@texasbc.org",
+        "subject": "={{ $json.subject }}",
+        "message": "={{ $json.htmlBody }}",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "AI Arbitration Platform"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        4912,
+        1136
+      ],
+      "id": "d6b7a341-6498-4b83-8ec1-9569563ee09c",
+      "name": "Admin: Determination Error",
+      "webhookId": "717eaf70-3734-4e5e-843f-719266940413",
+      "executeOnce": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ANRO7cdYCJKI7fae",
+          "name": "Gmail: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "stepfun/step-3.5-flash:free",
+        "options": {
+          "responseFormat": "text",
+          "temperature": 0,
+          "maxRetries": 3,
+          "topP": 0.9
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        3888,
+        1120
+      ],
+      "id": "84c23b78-73df-4afb-9ef3-130e4cf4a545",
+      "name": "Reasoning LLM (Text-Only)",
+      "notesInFlow": true,
+      "credentials": {
+        "openRouterApi": {
+          "id": "adSvEB68jN5HNHlj",
+          "name": "OpenRouter account"
+        }
+      },
+      "notes": "Medium Context"
+    },
+    {
+      "parameters": {
+        "model": "deepseek-reasoner",
+        "options": {
+          "responseFormat": "json_object",
+          "temperature": 0,
+          "maxRetries": 3,
+          "topP": 0.9
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [
+        3712,
+        1120
+      ],
+      "id": "ed96bbd9-ec16-4a23-b275-336983c97f0f",
+      "name": "DeepSeek 0528 (Text-Only)",
+      "notesInFlow": true,
+      "credentials": {
+        "deepSeekApi": {
+          "id": "BL3ZGjo57bLVX8di",
+          "name": "DeepSeek account"
+        }
+      },
+      "notes": "Context: 164K"
+    },
+    {
+      "parameters": {
+        "options": {
+          "temperature": 0.1,
+          "topP": 0.9
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        2416,
+        1136
+      ],
+      "id": "5ad290c8-5d28-4cfb-af5c-b69e861ef4b7",
+      "name": "Gemini-3.1-Pro (Multimodal)",
+      "notesInFlow": true,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "GCtsiJzQzNxqXxsp",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      },
+      "notes": "Context: 1.05M"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-5.2-pro",
+        "options": {
+          "responseFormat": "json_object",
+          "temperature": 0,
+          "maxRetries": 2,
+          "topP": 0.9
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        2560,
+        1136
+      ],
+      "id": "1f6fe018-d1a4-4d4b-81e3-9c94d793fcd8",
+      "name": "Discovery LLM (Multimodal)",
+      "notesInFlow": true,
+      "credentials": {
+        "openRouterApi": {
+          "id": "adSvEB68jN5HNHlj",
+          "name": "OpenRouter account"
+        }
+      },
+      "notes": "Large Context"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 12
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        912,
+        864
+      ],
+      "id": "e5fdf60c-5afc-47b6-ad45-2643f32a0a6f",
+      "name": "Every 12 hours"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Calculator": {
+      "ai_tool": [
+        [
+          {
+            "node": "Magistrate Judge",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Adjudication": {
+      "main": [
+        [
+          {
+            "node": "Error 2 Admin2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sort",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Disputed Cases": {
+      "main": [
+        [
+          {
+            "node": "Adjudication",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error 2 Admin1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Messages": {
+      "main": [
+        [
+          {
+            "node": "Merge5",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Get Files": {
+      "main": [
+        [
+          {
+            "node": "Merge5",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Magistrate Judge": {
+      "main": [
+        [
+          {
+            "node": "Validate Case Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Case Packet": {
+      "main": [
+        [
+          {
+            "node": "Magistrate Judge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Get Messages",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Files",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge5",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Record Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sort": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Case Record": {
+      "ai_memory": [
+        [
+          {
+            "node": "Magistrate Judge",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verification": {
+      "main": [
+        [
+          {
+            "node": "Final Judge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Final Judge",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Generate Error Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Generate Error Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Access Files": {
+      "ai_tool": [
+        [
+          {
+            "node": "Magistrate Judge",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "External API": {
+      "ai_tool": [
+        [
+          {
+            "node": "Magistrate Judge",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge5": {
+      "main": [
+        [
+          {
+            "node": "Prepare Case Packet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4o-mini: Report": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Structured Report",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Case Report": {
+      "main": [
+        [
+          {
+            "node": "Verification",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verification1": {
+      "main": [
+        [
+          {
+            "node": "Record Determination",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Record Determination",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Generate Email: Determination Error",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Generate Email: Determination Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Report": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Magistrate Judge",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Final Judge": {
+      "main": [
+        [
+          {
+            "node": "Validate Determination",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Determination": {
+      "main": [
+        [
+          {
+            "node": "Verification1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Determination HTML File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Report MD File": {
+      "main": [
+        [
+          {
+            "node": "Upload Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Determination": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Final Judge",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4o-mini: Determination": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Structured Determination",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Error Email": {
+      "main": [
+        [
+          {
+            "node": "Admin: Report Error ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Markdown": {
+      "main": [
+        [
+          {
+            "node": "Report MD File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Determination HTML File": {
+      "main": [
+        [
+          {
+            "node": "Upload Determination",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Record Determination": {
+      "main": [
+        [
+          {
+            "node": "Determination to Seller",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Determination to Buyer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Email: Determination Error": {
+      "main": [
+        [
+          {
+            "node": "Admin: Determination Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reasoning LLM (Text-Only)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Final Judge",
+            "type": "ai_languageModel",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "DeepSeek 0528 (Text-Only)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Final Judge",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini-3.1-Pro (Multimodal)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Magistrate Judge",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Discovery LLM (Multimodal)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Magistrate Judge",
+            "type": "ai_languageModel",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Every 12 hours": {
+      "main": [
+        [
+          {
+            "node": "Get Disputed Cases",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "IoDiKYr2P0CCN0tS",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "08cfb052-c38d-431f-8637-eb7fe5487412",
+  "meta": {
+    "instanceId": "b90ffdbc59f10e676c36dd1759918b25b17135aab9ea9e58b09a4edbc52cc3bc"
+  },
+  "id": "j92ti1bNi6xQOU8n",
+  "tags": []
+}

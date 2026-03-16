@@ -1,0 +1,127 @@
+{
+  "name": "Exceptions",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "# Global Error Handling\n\n**Trigger:** Any error not already handled.\n**Action:** It sends an Email to the Admin\n\n### * Important nodes have customized error handling to capture all the relevant information.  ",
+        "height": 1040,
+        "width": 1296,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "53cb6a2a-288c-43c0-aba5-aab96fc2223c",
+      "name": "Sticky Note14"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        256,
+        480
+      ],
+      "id": "ebde486d-6f18-4727-9180-8128a2a36ae8",
+      "name": "Global Error Trigger"
+    },
+    {
+      "parameters": {
+        "sendTo": "=ceo@texasbc.org",
+        "subject": "=Arbitration Error: Global ",
+        "message": "=<div style=\"font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 20px auto; border: 1px solid #e0e0e0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);\">\n    \n    <div style=\"background-color: #DE350B; color: white; padding: 24px; text-align: center;\">\n        <h2 style=\"margin: 0; font-size: 22px; letter-spacing: 1px;\">Global Error Catch</h2>\n        <p style=\"margin: 5px 0 0 0; opacity: 0.9; font-size: 14px;\">Arbitration System Alert</p>\n    </div>\n    \n    <div style=\"padding: 30px; line-height: 1.6; color: #333;\">\n        <p style=\"font-size: 16px; margin-top: 0;\">A node has caused an error. Please review the details below:</p>\n\n        <div style=\"background-color: #fcfcfc; border: 1px solid #eee; border-radius: 8px; padding: 15px; margin-bottom: 20px;\">\n            <table style=\"width: 100%; border-collapse: collapse;\">\n                <tr>\n                    <td style=\"padding: 8px 0; color: #666; font-weight: bold; width: 40%;\">Execution ID:</td>\n                    <td style=\"padding: 8px 0; font-family: monospace; font-size: 16px; color: #DE350B;\">{{ $json.execution.id  || 'N/A' }}</td>\n                </tr>\n                <tr>\n                    <td style=\"padding: 8px 0; color: #666; font-weight: bold; width: 40%;\">Execution Mode:</td>\n                    <td style=\"padding: 8px 0; font-family: monospace; font-size: 16px; color: #DE350B;\">{{ $json.execution.mode || 'N/A' }}</td>\n                </tr>\n                <tr>\n                    <td style=\"padding: 8px 0; color: #666; font-weight: bold; width: 40%;\">Last Node Executed:</td>\n                    <td style=\"padding: 8px 0; font-family: monospace; font-size: 16px; color: #DE350B;\">{{ $json.execution.lastNodeExecuted || 'N/A' }}</td>\n                </tr>\n                <tr>\n                    <td style=\"padding: 8px 0; color: #666; font-weight: bold;\">Workflow ID:</td>\n                    <td style=\"padding: 8px 0;\">{{ $json.workflow.id || 'N/A' }}</td>\n                </tr>\n                <tr>\n                    <td style=\"padding: 8px 0; color: #666; font-weight: bold;\">Workflow Name:</td>\n                    <td style=\"padding: 8px 0;\">{{ $json.workflow.name || 'N/A' }}</td>\n                </tr>\n            </table>\n        </div>\n\n        <div style=\"background-color: #FFF5F5; border-left: 4px solid #DE350B; padding: 15px; margin: 20px 0;\">\n            <strong style=\"color: #DE350B; display: block; margin-bottom: 5px;\">Error Message:</strong>\n            <span style=\"font-size: 15px; font-weight: 500;\">\n            {{ $json.execution.error.message || \"Unknown Error\" }}\n            </span>\n        </div>\n        <div style=\"background-color: #FFF5F5; border-left: 4px solid #DE350B; padding: 15px; margin: 20px 0;\">\n            <strong style=\"color: #DE350B; display: block; margin-bottom: 5px;\">Execution URL:</strong>\n            <span style=\"font-size: 15px; font-weight: 500;\">\n            {{  $json.execution.url || \"Unknown URL\" }}\n            </span>\n        </div>\n\n        <p style=\"font-size: 13px; color: #666; margin-bottom: 8px;\"><strong>Raw Technical Context:</strong></p>\n        <pre style=\"background: #2D3436; color: #00D1FF; padding: 15px; border-radius: 6px; font-size: 11px; overflow-x: auto; margin: 0;\">{{ JSON.stringify( $json.execution.error, null, 2) || 'N/A' }}</pre>\n    </div>\n    \n    <div style=\"background-color: #f9f9f9; padding: 15px; text-align: center; font-size: 11px; color: #999; border-top: 1px solid #eee;\">\n        Timestamp: {{ new Date().toLocaleString() || 'N/A' }} \n    </div>\n</div>",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "Automated Arbitration System"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        544,
+        480
+      ],
+      "id": "d6a2a62b-63a7-47ce-bfd2-35c4e7758233",
+      "name": "To Admin: Global Error",
+      "webhookId": "717eaf70-3734-4e5e-843f-719266940413",
+      "executeOnce": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ANRO7cdYCJKI7fae",
+          "name": "Gmail: governplanet"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "fromEmail": "arbitration.blockcenter@gmail.com",
+        "toEmail": "ceo@texasbc.org",
+        "subject": "Global Error Fallback from Automated Arbitration System",
+        "html": "=<div style=\"font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 20px auto; border: 1px solid #e0e0e0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);\">\n    \n    <div style=\"background-color: #DE350B; color: white; padding: 24px; text-align: center;\">\n        <h2 style=\"margin: 0; font-size: 22px; letter-spacing: 1px;\">Global Error Fallback</h2>\n        <p style=\"margin: 5px 0 0 0; opacity: 0.9; font-size: 14px;\">Arbitration System Alert</p>\n    </div>\n    \n    <div style=\"padding: 30px; line-height: 1.6; color: #333;\">\n        <p style=\"font-size: 16px; margin-top: 0;\">A node has caused an error. Please review the details below:</p>\n\n        <div style=\"background-color: #fcfcfc; border: 1px solid #eee; border-radius: 8px; padding: 15px; margin-bottom: 20px;\">\n            <table style=\"width: 100%; border-collapse: collapse;\">\n                <tr>\n                    <td style=\"padding: 8px 0; color: #666; font-weight: bold; width: 40%;\">Execution ID:</td>\n                    <td style=\"padding: 8px 0; font-family: monospace; font-size: 16px; color: #DE350B;\">{{  $('Global Error Trigger').item.json.execution.id  || 'N/A' }}</td>\n                </tr>\n                <tr>\n                    <td style=\"padding: 8px 0; color: #666; font-weight: bold; width: 40%;\">Execution Mode:</td>\n                    <td style=\"padding: 8px 0; font-family: monospace; font-size: 16px; color: #DE350B;\">{{ $('Global Error Trigger').item.json.execution.mode  || 'N/A' }}</td>\n                </tr>\n                <tr>\n                    <td style=\"padding: 8px 0; color: #666; font-weight: bold; width: 40%;\">Last Node Executed:</td>\n                    <td style=\"padding: 8px 0; font-family: monospace; font-size: 16px; color: #DE350B;\">{{ $('Global Error Trigger').item.json.execution.lastNodeExecuted  || 'N/A' }}</td>\n                </tr>\n                <tr>\n                    <td style=\"padding: 8px 0; color: #666; font-weight: bold;\">Workflow ID:</td>\n                    <td style=\"padding: 8px 0;\">{{ $('Global Error Trigger').item.json.workflow.id || 'N/A' }}</td>\n                </tr>\n                <tr>\n                    <td style=\"padding: 8px 0; color: #666; font-weight: bold;\">Workflow Name:</td>\n                    <td style=\"padding: 8px 0;\">{{ $('Global Error Trigger').item.json.workflow.name  || 'N/A' }}</td>\n                </tr>\n            </table>\n        </div>\n\n        <div style=\"background-color: #FFF5F5; border-left: 4px solid #DE350B; padding: 15px; margin: 20px 0;\">\n            <strong style=\"color: #DE350B; display: block; margin-bottom: 5px;\">Error Message:</strong>\n            <span style=\"font-size: 15px; font-weight: 500;\">\n            {{ $('Global Error Trigger').item.json.execution.error.message || \"Unknown Error\" }}\n            </span>\n        </div>\n        <div style=\"background-color: #FFF5F5; border-left: 4px solid #DE350B; padding: 15px; margin: 20px 0;\">\n            <strong style=\"color: #DE350B; display: block; margin-bottom: 5px;\">Execution URL:</strong>\n            <span style=\"font-size: 15px; font-weight: 500;\">\n            {{ $('Global Error Trigger').item.json.execution.url  || \"Unknown URL\" }}\n            </span>\n        </div>\n\n        <p style=\"font-size: 13px; color: #666; margin-bottom: 8px;\"><strong>Raw Technical Context:</strong></p>\n        <pre style=\"background: #2D3436; color: #00D1FF; padding: 15px; border-radius: 6px; font-size: 11px; overflow-x: auto; margin: 0;\">{{ JSON.stringify( $('Global Error Trigger').item.json.execution.error , null, 2) || 'N/A' }}</pre>\n    </div>\n    \n    <div style=\"background-color: #f9f9f9; padding: 15px; text-align: center; font-size: 11px; color: #999; border-top: 1px solid #eee;\">\n        Timestamp: {{ new Date().toLocaleString() || 'N/A' }} \n    </div>\n</div>",
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        864,
+        496
+      ],
+      "id": "021fa7cd-f163-4193-924a-9046d1fdb29d",
+      "name": "Fallback Admin: Global Error",
+      "webhookId": "406e5e58-f7fc-4094-817b-d8d0438bdd9c",
+      "credentials": {
+        "smtp": {
+          "id": "2s4FbT1DpIQqYEaH",
+          "name": "SMTP: governplanet@gmail.com"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Global Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "To Admin: Global Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "To Admin: Global Error": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Fallback Admin: Global Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "IoDiKYr2P0CCN0tS",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "def58fe7-3666-4e34-a0d0-e2ad0edf517a",
+  "meta": {
+    "instanceId": "b90ffdbc59f10e676c36dd1759918b25b17135aab9ea9e58b09a4edbc52cc3bc"
+  },
+  "id": "IoDiKYr2P0CCN0tS",
+  "tags": []
+}

@@ -1,0 +1,4418 @@
+{
+  "name": "Initialization",
+  "nodes": [
+    {
+      "parameters": {
+        "sendTo": "={{ $json.BuyerEmail }}",
+        "subject": "=Action Required : Case {{ $json.CaseId }}",
+        "message": "=<h3>To Buyer in Case {{ $json.CaseId }}: </h3>\n\n<p>Dear {{ $json.Buyer }},</p>\n<p>The contract is ready for your signature. This folder contains the {{ $binary && $binary.ContractFile ? 'contract file and ' : '' }}submitted documents:</p>\n\n<p>📂 <a href=\"{{ $json.webViewLink }}\"><b>View Case Folder</b></a></p>\n\n<div style=\"background-color: #f8f9fa; padding: 15px; border: 1px solid #dee2e6;\">\n  <strong>Case Details:</strong><br><br>\n  Seller: {{ $json.Seller }} ({{ $json.SellerEmail }})<br>\n  Buyer: {{ $json.Buyer }} ({{ $json.BuyerEmail }})<br><br>\n<br>\n  Escrow Fund: {{ $json.EscrowFund / 10**18 }} ETH <br>\n  Processing Fee: {{ $json.Fee / 10**18 }} ETH <br>\n<br>\nThe Buyer is responsible for depositing the escrow fund and the fee (totaling {{ ($json.EscrowFund+$json.Fee) / 10**18 }} ETH). <br>\n\n<a href=\"{{ $('Config & Case ID').item.json.DEPOSIT_URL }}?caseId={{ $json.CaseId }}\">\n  Deposit Ether\n</a>\n</div>\n</br>\n<p><strong>Contract Terms:</strong></p>\n<div style=\"background-color: #ffffff; padding: 10px; border: 1px dashed #cccccc; font-family: monospace; white-space: pre-wrap;\">\n{{ $json.ContractText }}\n</div>\n\n<hr>\n<p><b>Please choose an action below:</b></p>\n<p>\n  <a href=\"{{ $('Config & Case ID').item.json.RESPONSE_URL }}?caseId={{$json.CaseId}}&party=Buyer&action=accept&token={{ $json.Buyer_Token }}\" style=\"background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;\"><b>ACCEPT CONTRACT</b></a>\n</b></b>  &nbsp;&nbsp; \n  <a href=\"{{ $('Config & Case ID').item.json.RESPONSE_URL }}?caseId={{$json.CaseId }}&party=Buyer&action=decline&token={{ $json.Buyer_Token }}\" style=\"background: #dc3545; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;\"><b>DECLINE CONTRACT</b></a>\n</p>\n\n<br>\n\n\n<hr>\n\n<p>You can use this link to provide your Ethereum wallet address for potential deposit:</p>\n<a href=\"{{ $('Config & Case ID').item.json.WALLET_URL }}?caseId={{ $json.CaseId }}&party=Buyer&token={{ $json.Buyer_Token }}\">\n  Submit Wallet Address\n</a>\n\n<hr>\n\n<p style=\"margin-top: 25px; font-size: 11px; color: #a0aec0; text-align: center;\">\n    By clicking on 'Accept Contract', you apply your digital signature via <br>\n    <strong>Texas Blockchain Center LLC</strong>. <br><br>\n    <a href=\"{{$vars.BASE_URL}}webhook{{$execution.mode === 'production'?'':'-test'}}/terms\" \n       target=\"_blank\" \n       style=\"color: #4a5568; text-decoration: underline;\">\n       View Full Arbitration Agreement\n    </a>\n</p>\n\n<p style=\"margin-top: 30px; text-align: center;\">\n  <span style=\"font-size: 11px; color: #888888; font-family: sans-serif; letter-spacing: 0.5px;\">\n    AI Arbitration Platform\n  </span>\n</p>",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "AI Arbitration Platform"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1760,
+        3024
+      ],
+      "id": "0c0f50de-2f55-45dc-bab1-53d2834b5b98",
+      "name": "To-Buyer",
+      "webhookId": "717eaf70-3734-4e5e-843f-719266940413",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ANRO7cdYCJKI7fae",
+          "name": "Gmail: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.SellerEmail }}",
+        "subject": "=Action Required : Case {{ $json.CaseId }}",
+        "message": "=<h3>To Seller in Case  {{ $json.CaseId }}: </h3>\n\n<p>Dear {{ $json.Seller }},</p>\n<p>The contract is ready for your signature. This folder contains the {{ $binary && $binary.ContractFile ? 'contract file and ' : '' }}submitted documents:</p>\n\n<p>📂 <a href=\"{{ $json.webViewLink }}\"><b>View Case Folder</b></a></p>\n\n<div style=\"background-color: #f8f9fa; padding: 15px; border: 1px solid #dee2e6;\">\n  <strong>Case Details:</strong><br><br>\n  Seller: {{ $json.Seller }} ({{ $json.SellerEmail }}) <br>\n  Buyer: {{ $json.Buyer }} ({{ $json.BuyerEmail }}) <br>\n<br>\n  Escrow Fund: {{ $json.EscrowFund / 10**18 }} ETH <br>\n  Processing Fee: {{ $json.Fee / 10**18 }} ETH <br>\n</div>\n</br>\n<p><strong>Contract Terms:</strong></p>\n<div style=\"background-color: #ffffff; padding: 10px; border: 1px dashed #cccccc; font-family: monospace; white-space: pre-wrap;\">\n{{ $json.ContractText }}\n</div>\n\n<hr>\n<p><b>Please choose an action below:</b></p>\n<p>\n  <a href=\"{{ $('Config & Case ID').item.json.RESPONSE_URL }}?caseId={{$json.CaseId}}&party=Seller&action=accept&token={{ $json.Seller_Token }}\" style=\"background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;\"><b>ACCEPT CONTRACT</b></a>\n</b></b>  &nbsp;&nbsp; \n  <a href=\"{{ $('Config & Case ID').item.json.RESPONSE_URL }}?caseId={{$json.CaseId }}&party=Seller&action=decline&token={{ $json.Seller_Token }}\" style=\"background: #dc3545; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;\"><b>DECLINE CONTRACT</b></a>\n<br><br>\n<hr>\n\n<p>You can use the following link to provide your Ethereum wallet address for potential deposit:</p>\n<a href=\"{{ $('Config & Case ID').item.json.WALLET_URL }}?caseId={{$json.CaseId}}&party=Seller&token={{ $json.Seller_Token }}\"> Submit Wallet Address\n</a>\n<hr>\n\n<p style=\"margin-top: 25px; font-size: 11px; color: #a0aec0; text-align: center;\">\n    By clicking on 'Accept Contract', you apply your digital signature via <br>\n    <strong>Texas Blockchain Center LLC</strong>. <br><br>\n    <a href=\"{{$vars.BASE_URL}}webhook{{$execution.mode === 'production'?'':'-test'}}/terms\" \n       target=\"_blank\" \n       style=\"color: #4a5568; text-decoration: underline;\">\n       View Full Arbitration Agreement\n    </a>\n</p>\n\n<p style=\"margin-top: 30px; text-align: center;\">\n  <span style=\"font-size: 11px; color: #888888; font-family: sans-serif; letter-spacing: 0.5px;\">\n    AI Arbitration Platform\n  </span>\n</p>",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "AI Arbitration Platform"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1760,
+        2848
+      ],
+      "id": "9d2b8de3-4d37-4a8e-94a6-2ac786fbcbf5",
+      "name": "To-Seller",
+      "webhookId": "717eaf70-3734-4e5e-843f-719266940413",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ANRO7cdYCJKI7fae",
+          "name": "Gmail: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "=ContractFile",
+        "name": "=Contract.pdf",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $json.webViewLink }}",
+          "mode": "url"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1888,
+        2480
+      ],
+      "id": "a5bf0f2a-c665-42f5-8817-488904c23bc0",
+      "name": "Contract PDF",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "DaYtvl0uWvCtS30q",
+          "name": "Drive: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "name": "={{'Case#' + $json.CaseId}}",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1xk-BsMMSswEX_bFo4JPHla7_O_gxoPPz",
+          "mode": "list",
+          "cachedResultName": "Arbitration Cases",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1xk-BsMMSswEX_bFo4JPHla7_O_gxoPPz"
+        },
+        "options": {
+          "simplifyOutput": false,
+          "folderColorRgb": "#DE0AF6"
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1024,
+        2656
+      ],
+      "id": "66b1cbfe-61fc-4939-a7a1-b7ed2506231d",
+      "name": "Create folder",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "DaYtvl0uWvCtS30q",
+          "name": "Drive: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1232,
+        2768
+      ],
+      "id": "1f4ce579-72da-469b-b7e6-5d163e1ecf8d",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "formTitle": "New Contract Registration",
+        "formDescription": "\n\nSeller (the provider of goods or services): \n\nEmployee, Landlord, Contractor, Freelancer, Supplier, Vendor, etc. \n\n\nBuyer (the payer for goods or services): \n\nEmployer, Renter, Client, Company, Customer, Government Agency, etc.\n\n\n",
+        "formFields": {
+          "values": [
+            {
+              "fieldName": "Seller",
+              "fieldLabel": "Legal name of the Seller (Provider)",
+              "requiredField": true
+            },
+            {
+              "fieldName": "Buyer",
+              "fieldLabel": "Legal name of the Buyer (Payer)",
+              "requiredField": true
+            },
+            {
+              "fieldName": "SellerEmail",
+              "fieldLabel": "Seller's Email",
+              "fieldType": "email",
+              "requiredField": true
+            },
+            {
+              "fieldName": "BuyerEmail",
+              "fieldLabel": "Buyer's Email",
+              "fieldType": "email",
+              "requiredField": true
+            },
+            {
+              "fieldName": "EscrowFundETH",
+              "fieldLabel": "Required Escrow Fund (ETH)",
+              "fieldType": "number",
+              "defaultValue": "0",
+              "requiredField": true
+            },
+            {
+              "fieldName": "ContractText",
+              "fieldLabel": "Contract Text",
+              "fieldType": "textarea",
+              "requiredField": true
+            },
+            {
+              "fieldName": "ContractFile",
+              "fieldLabel": "Contract PDF",
+              "fieldType": "file",
+              "multipleFiles": false,
+              "acceptFileTypes": ".pdf"
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false,
+          "path": "start",
+          "respondWithOptions": {
+            "values": {
+              "formSubmittedText": "=Contract stored as Case #{{$execution.id}}. \nEmail is sent to parties. \nThe contract is not effective until both parties accept the contract and the buyer deposits the amount. \n\n"
+            }
+          },
+          "customCss": ":root {\n    /* ... other variables ... */\n    --container-width: 960px;\n    --textarea-height: 400px; /* Doubled height for a true 'document' feel */\n}\n\n/* Specific target for the contract field */\ntextarea {\n    height: var(--textarea-height) !important; /* Forces the height */\n    min-height: var(--textarea-height) !important;\n    font-family: 'Courier New', Courier, monospace; /* Optional: Makes it look like a legal doc */\n    font-size: 14px;\n    line-height: 1.8;\n    padding: 24px !important;\n    background-color: #ffffff;\n    border: 1.5px solid var(--color-input-border);\n}"
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.4,
+      "position": [
+        560,
+        2784
+      ],
+      "id": "39190f7f-482e-4c68-9921-825857815012",
+      "name": "Create a Case",
+      "webhookId": "59f0b138-9c13-4bb6-8cf5-35c928af1b11",
+      "alwaysOutputData": false,
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6e142cd8-181b-4b13-8482-010274e6abb5",
+              "name": "CaseId",
+              "value": "={{ Number($execution.id) * 100 +  Math.floor(Math.random() * 100)  }}",
+              "type": "string"
+            },
+            {
+              "id": "009fb66d-83be-47b4-b4ce-b747515e8c0d",
+              "name": "RESPONSE_URL",
+              "value": "={{$vars.BASE_URL}}webhook{{$execution.mode === \"production\"?\"\":\"-test\"}}/response",
+              "type": "string"
+            },
+            {
+              "id": "5493c3d1-ba7d-43ea-a31e-7cdf089abdbd",
+              "name": "SIGNATURE_URL",
+              "value": "={{$vars.BASE_URL}}webhook{{$execution.mode === \"production\"?\"\":\"-test\"}}/signature-response\n",
+              "type": "string"
+            },
+            {
+              "id": "86a9fc1d-a195-4df1-845c-2ff81281f115",
+              "name": "WALLET_URL",
+              "value": "={{$vars.BASE_URL}}form{{$execution.mode === \"production\"?\"\":\"-test\"}}/wallet",
+              "type": "string"
+            },
+            {
+              "id": "3c50d5e2-5bbe-4182-ad6e-cc7ae8697aaf",
+              "name": "DEPOSIT_URL",
+              "value": "={{$vars.BASE_URL}}webhook{{$execution.mode === \"production\"?\"\":\"-test\"}}/deposit",
+              "type": "string"
+            },
+            {
+              "id": "873d3fcc-7e6c-40aa-9cf9-b7c9c393b52e",
+              "name": "Seller_Token",
+              "value": "={{ Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) }}",
+              "type": "string"
+            },
+            {
+              "id": "a2ba21da-3cc1-4eff-b5bd-5fdb029aa871",
+              "name": "Buyer_Token",
+              "value": "={{ Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) }}",
+              "type": "string"
+            },
+            {
+              "id": "e5ac1233-7b63-40f3-9976-6c355f0568ec",
+              "name": "EscrowFund",
+              "value": "={{ $json.EscrowFundETH * 1e18}}",
+              "type": "number"
+            },
+            {
+              "id": "47cd8f60-0346-4c9e-8050-b9d959f250e6",
+              "name": "Fee",
+              "value": "=0",
+              "type": "number"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        800,
+        2784
+      ],
+      "id": "2c5a9e7e-f46c-4df3-93c9-05011b82c301",
+      "name": "Config & Case ID"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=\n<div style=\"font-family: Arial, sans-serif; line-height: 1.6; color: #333;\">\n  <h3 style=\"color: #004a99; border-bottom: 2px solid #eee; padding-bottom: 10px;\">\n    You already responded for Case {{ $json['Case ID'] }}.\n  </h3>\n  \n  <p></p>\n  \n  <table style=\"width: 100%; border-collapse: collapse; margin-top: 15px;\">\n    <tr>\n      <td style=\"padding: 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f9f9f9; width: 40%;\">Required Deposit + Fee (ETH):</td>\n      <td style=\"padding: 8px; border: 1px solid #ddd; color: #28a745; font-weight: bold;\">{{ ( $('Lookup Case').item.json['Escrow Fund'] + $('Lookup Case').item.json['Fee'] )/ 10**18 }} </td>\n    </tr>\n\n    <tr>\n      <td style=\"padding: 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f9f9f9; width: 40%;\">Deposited Amount (ETH):</td>\n      <td style=\"padding: 8px; border: 1px solid #ddd; color: #28a745; font-weight: bold;\">{{ $('Case & Status').item.json['Deposited Fund'] / 10**18}} </td>\n    </tr>\n\n\n    <tr>\n      <td style=\"padding: 8px; border: 1px solid #ddd; font-weight: bold;\">Seller Response:</td>\n      <td style=\"padding: 8px; border: 1px solid #ddd;\">\n{{ $('Lookup Case').item.json['Seller Response']?$('Lookup Case').item.json['Seller Response'] : 'awaiting response' }}\n</td>\n    </tr>\n    <tr>\n      <td style=\"padding: 8px; border: 1px solid #ddd; font-weight: bold;\">Buyer Response:</td>\n      <td style=\"padding: 8px; border: 1px solid #ddd;\">{{ $('Lookup Case').item.json['Buyer Response']?$('Lookup Case').item.json['Buyer Response'] : 'awaiting response' }}</td>\n    </tr>\n\n  </table>\n  \n  <p style=\"margin-top: 20px; font-size: 12px; color: #777;\">\n    This is an automated notification.\n  </p>\n<p style=\"margin-top: 30px; text-align: center;\">\n  <span style=\"font-size: 11px; color: #888888; font-family: sans-serif; letter-spacing: 0.5px;\">\n    AI Arbitration Platform\n  </span>\n</p>\n</div>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1584,
+        4144
+      ],
+      "id": "1392eb41-5b26-4339-8f2b-cc24c9615d19",
+      "name": "Already Responded"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ",
+          "mode": "list",
+          "cachedResultName": "Arbitration",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1664223804,
+          "mode": "list",
+          "cachedResultName": "Cases",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ/edit#gid=1664223804"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Buyer Response": "={{ $('Signature Response').item.json.query.action }}",
+            "Status": "={{  $('Signature Response').item.json.query.action == 'accept' ?\n($('Lookup Case').item.json['Seller Response'] == 'accept' ? 'SIGNED' : '') \n: \n'DECLINED'}}",
+            "Case ID": "={{ $json['Case ID'] }}",
+            "Time": "={{ $now }}"
+          },
+          "matchingColumns": [
+            "Case ID"
+          ],
+          "schema": [
+            {
+              "id": "Case ID",
+              "displayName": "Case ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Seller",
+              "displayName": "Seller",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer",
+              "displayName": "Buyer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Email",
+              "displayName": "Seller Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Email",
+              "displayName": "Buyer Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Token",
+              "displayName": "Seller Token",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Token",
+              "displayName": "Buyer Token",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Wallet",
+              "displayName": "Seller Wallet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Wallet",
+              "displayName": "Buyer Wallet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Contract Text",
+              "displayName": "Contract Text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Response",
+              "displayName": "Seller Response",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Response",
+              "displayName": "Buyer Response",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Folder Link",
+              "displayName": "Folder Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Escrow Address",
+              "displayName": "Escrow Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Escrow Fund",
+              "displayName": "Escrow Fund",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Fee",
+              "displayName": "Fee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Deposited Fund",
+              "displayName": "Deposited Fund",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Payment to Seller",
+              "displayName": "Payment to Seller",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Refund to Buyer",
+              "displayName": "Refund to Buyer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Tip to Seller",
+              "displayName": "Tip to Seller",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Withdrawal",
+              "displayName": "Buyer Withdrawal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Payment Request Time",
+              "displayName": "Payment Request Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Refund Request Time",
+              "displayName": "Refund Request Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Dispute Time",
+              "displayName": "Dispute Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Adjudication Time",
+              "displayName": "Adjudication Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Determination Time",
+              "displayName": "Determination Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Decision",
+              "displayName": "Decision",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Award",
+              "displayName": "Seller Award",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Award",
+              "displayName": "Buyer Award",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Payout",
+              "displayName": "Seller Payout",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Payout",
+              "displayName": "Buyer Payout",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Appeal Time",
+              "displayName": "Appeal Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1824,
+        3856
+      ],
+      "id": "ad7ca695-afeb-4e6a-8185-1c49458351c8",
+      "name": "Update Buyer",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8PyGKtbWRXXj7YKz",
+          "name": "Sheets: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ",
+          "mode": "list",
+          "cachedResultName": "Arbitration",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1664223804,
+          "mode": "list",
+          "cachedResultName": "Cases",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ/edit#gid=1664223804"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Case ID": "={{ $json['Case ID'] }}",
+            "Seller Response": "={{ $('Signature Response').item.json.query.action }}",
+            "Status": "={{  $('Signature Response').item.json.query.action == 'accept' ?\n($('Lookup Case').item.json['Buyer Response'] == 'accept' ? 'SIGNED' : '') \n: \n'DECLINED'}}",
+            "Time": "={{ $now }}"
+          },
+          "matchingColumns": [
+            "Case ID"
+          ],
+          "schema": [
+            {
+              "id": "Case ID",
+              "displayName": "Case ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Seller",
+              "displayName": "Seller",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer",
+              "displayName": "Buyer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Email",
+              "displayName": "Seller Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Email",
+              "displayName": "Buyer Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Token",
+              "displayName": "Seller Token",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Token",
+              "displayName": "Buyer Token",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Wallet",
+              "displayName": "Seller Wallet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Wallet",
+              "displayName": "Buyer Wallet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Contract Text",
+              "displayName": "Contract Text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Response",
+              "displayName": "Seller Response",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Buyer Response",
+              "displayName": "Buyer Response",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Folder Link",
+              "displayName": "Folder Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Escrow Address",
+              "displayName": "Escrow Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Escrow Fund",
+              "displayName": "Escrow Fund",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Fee",
+              "displayName": "Fee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Deposited Fund",
+              "displayName": "Deposited Fund",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Payment to Seller",
+              "displayName": "Payment to Seller",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Refund to Buyer",
+              "displayName": "Refund to Buyer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Tip to Seller",
+              "displayName": "Tip to Seller",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Withdrawal",
+              "displayName": "Buyer Withdrawal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Payment Request Time",
+              "displayName": "Payment Request Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Refund Request Time",
+              "displayName": "Refund Request Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Dispute Time",
+              "displayName": "Dispute Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Adjudication Time",
+              "displayName": "Adjudication Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Determination Time",
+              "displayName": "Determination Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Decision",
+              "displayName": "Decision",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Award",
+              "displayName": "Seller Award",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Award",
+              "displayName": "Buyer Award",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Payout",
+              "displayName": "Seller Payout",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Payout",
+              "displayName": "Buyer Payout",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Appeal Time",
+              "displayName": "Appeal Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1824,
+        4032
+      ],
+      "id": "83dbd1c8-5372-4f0e-a84e-b5117e8baa94",
+      "name": "Update Seller",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8PyGKtbWRXXj7YKz",
+          "name": "Sheets: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=\n<div style=\"font-family: Arial, sans-serif; line-height: 1.6; color: #333;\">\n  <h3 style=\"color: #dd4a00; border-bottom: 2px solid #eee; padding-bottom: 10px;\">\n    Case {{ $json['Case ID'] }} is already declined.\n  </h3>\n  \n  <p></p>\n  \n  <table style=\"width: 100%; border-collapse: collapse; margin-top: 15px;\">\n    <tr>\n      <td style=\"padding: 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f9f9f9; width: 40%;\">Required Deposit + Fee (ETH):</td>\n      <td style=\"padding: 8px; border: 1px solid #ddd; color: #28a745; font-weight: bold;\">{{ ( $('Lookup Case').item.json['Escrow Fund'] + $('Lookup Case').item.json['Fee'] )/ 10**18 }} </td>\n    </tr>\n\n    <tr>\n      <td style=\"padding: 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f9f9f9; width: 40%;\">Deposited Amount (ETH):</td>\n      <td style=\"padding: 8px; border: 1px solid #ddd; color: #28a745; font-weight: bold;\">{{ $('Case & Status').item.json['Deposited Fund'] / 10**18}} </td>\n    </tr>\n\n\n    <tr>\n      <td style=\"padding: 8px; border: 1px solid #ddd; font-weight: bold;\">Seller Response:</td>\n      <td style=\"padding: 8px; border: 1px solid #ddd;\">\n{{ $('Lookup Case').item.json['Seller Response']?$('Lookup Case').item.json['Seller Response'] : 'awaiting response' }}\n</td>\n    </tr>\n    <tr>\n      <td style=\"padding: 8px; border: 1px solid #ddd; font-weight: bold;\">Buyer Response:</td>\n      <td style=\"padding: 8px; border: 1px solid #ddd;\">{{ $('Lookup Case').item.json['Buyer Response']?$('Lookup Case').item.json['Buyer Response'] : 'awaiting response' }}</td>\n    </tr>\n\n  </table>\n  \n<p style=\"margin-top: 30px; text-align: center;\">\n  <span style=\"font-size: 11px; color: #888888; font-family: sans-serif; letter-spacing: 0.5px;\">\n    AI Arbitration Platform\n  </span>\n</p>\n</div>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1584,
+        3728
+      ],
+      "id": "ddb7dbad-8127-4986-a395-f537dc2bc823",
+      "name": "Already Declined"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=<div style=\"font-family: Arial, sans-serif; line-height: 1.6; color: #333;\">\n  <h3 style=\"color: #004a99; border-bottom: 2px solid #eee; padding-bottom: 10px;\">\n    Case {{ $json.caseId }} Status Update\n  </h3>\n  \n  <p>The status of your case has been updated:</p>\n  \n  <table style=\"width: 100%; border-collapse: collapse; margin-top: 15px;\">\n\n    <tr>\n      <td style=\"padding: 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f9f9f9; width: 40%;\">Required Deposit + Fee (ETH):</td>\n      <td style=\"padding: 8px; border: 1px solid #ddd; color: #28a745; font-weight: bold;\"> {{ $json.totalRequiredETH }} </td>\n    </tr>\n\n    <tr>\n      <td style=\"padding: 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f9f9f9; width: 40%;\">Deposited Amount (ETH):</td>\n      <td style=\"padding: 8px; border: 1px solid #ddd; color: #28a745; font-weight: bold;\">{{ $json.depositedETH}} </td>\n    </tr>\n\n    <tr>\n      <td style=\"padding: 8px; border: 1px solid #ddd; font-weight: bold;\">Seller Response:</td>\n      <td style=\"padding: 8px; border: 1px solid #ddd;\"> {{ $('Generate HTML').item.json.sellerResponse }}\n</td>\n    </tr>\n\n    <tr>\n      <td style=\"padding: 8px; border: 1px solid #ddd; font-weight: bold;\">Buyer Response:</td>\n      <td style=\"padding: 8px; border: 1px solid #ddd;\"> {{ $('Generate HTML').item.json.buyerResponse }}</td>\n    </tr>\n\n  </table>\n\n{{ $('Signature Response').item.json.query.party === 'buyer' ? $json.actionHtml : ''}}\n  \n  <p style=\"margin-top: 20px; font-size: 12px; color: #777;\">\n    This is an automated notification.\n  </p>\n<p style=\"margin-top: 30px; text-align: center;\">\n  <span style=\"font-size: 11px; color: #888888; font-family: sans-serif; letter-spacing: 0.5px;\">\n    AI Arbitration Platform\n  </span>\n</p>\n</div>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        2400,
+        3840
+      ],
+      "id": "cc0a3994-b469-4df8-b511-8768a7485305",
+      "name": "Show Status"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nconst addr = input.wallet || \"\"; // Fallback to empty string if null\n\n// Regex check\nconst isValid = /^0x[a-fA-F0-9]{40}$/.test(addr);\n\nreturn {\n  caseId: input.caseId,\n  party: input.party, \n  wallet: isValid ? addr.toLowerCase() : addr,\n  isValid: isValid, // Pass this to an IF node\n};"
+      },
+      "id": "25945c67-027f-481d-b467-87f615d76dc0",
+      "name": "Validate Wallet",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        736,
+        5056
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ",
+          "mode": "list",
+          "cachedResultName": "Arbitration",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1664223804,
+          "mode": "list",
+          "cachedResultName": "Cases",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ/edit#gid=1664223804"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Case ID": "={{ $json['Case ID'] }}",
+            "Seller Wallet": "={{ $('Wallet Address').item.json.party === 'Seller' ? $('Wallet is Valid').item.json.wallet : $json['Seller Wallet'] }}",
+            "Buyer Wallet": "={{ $('Wallet Address').item.json.party === 'Buyer' ? $('Wallet is Valid').item.json.wallet : $json['Buyer Account'] }}"
+          },
+          "matchingColumns": [
+            "Case ID"
+          ],
+          "schema": [
+            {
+              "id": "Case ID",
+              "displayName": "Case ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller",
+              "displayName": "Seller",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer",
+              "displayName": "Buyer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Email",
+              "displayName": "Seller Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Email",
+              "displayName": "Buyer Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Token",
+              "displayName": "Seller Token",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Token",
+              "displayName": "Buyer Token",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Wallet",
+              "displayName": "Seller Wallet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Buyer Wallet",
+              "displayName": "Buyer Wallet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Contract Text",
+              "displayName": "Contract Text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Response",
+              "displayName": "Seller Response",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Response",
+              "displayName": "Buyer Response",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Folder Link",
+              "displayName": "Folder Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Escrow Address",
+              "displayName": "Escrow Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Escrow Fund",
+              "displayName": "Escrow Fund",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Fee",
+              "displayName": "Fee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Deposited Fund",
+              "displayName": "Deposited Fund",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Payment to Seller",
+              "displayName": "Payment to Seller",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Refund to Buyer",
+              "displayName": "Refund to Buyer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Tip to Seller",
+              "displayName": "Tip to Seller",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Withdrawal",
+              "displayName": "Buyer Withdrawal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Payment Request Time",
+              "displayName": "Payment Request Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Refund Request Time",
+              "displayName": "Refund Request Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Dispute Time",
+              "displayName": "Dispute Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Adjudication Time",
+              "displayName": "Adjudication Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Determination Time",
+              "displayName": "Determination Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Decision",
+              "displayName": "Decision",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Award",
+              "displayName": "Seller Award",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Award",
+              "displayName": "Buyer Award",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Payout",
+              "displayName": "Seller Payout",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Payout",
+              "displayName": "Buyer Payout",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Appeal Time",
+              "displayName": "Appeal Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "a1da23f0-4654-476a-b5f4-892e4429bb92",
+      "name": "Update Wallet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        1984,
+        5008
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8PyGKtbWRXXj7YKz",
+          "name": "Sheets: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ",
+          "mode": "list",
+          "cachedResultName": "Arbitration",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1664223804,
+          "mode": "list",
+          "cachedResultName": "Cases",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ/edit#gid=1664223804"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Case ID",
+              "lookupValue": "={{ $json.caseId }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1280,
+        5040
+      ],
+      "id": "d3b2fc90-09b4-43fa-adec-662b98aa72da",
+      "name": "Lookup Case Wallet",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "maxTries": 2,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8PyGKtbWRXXj7YKz",
+          "name": "Sheets: governplanet"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Wallet Address').item.json.formQueryParameters.party == 'Seller' ? $('Lookup Case Wallet').item.json['Seller Email'] : $('Lookup Case Wallet').item.json['Buyer Email'] }}",
+        "subject": "=Wallet Address Updated for Case {{ $json['Case ID'] }}",
+        "message": "=<div style=\"font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 550px; margin: 40px auto; padding: 0; border-radius: 12px; overflow: hidden; border: 1px solid #e1e4e8; background-color: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.05);\">\n    \n    <div style=\"background-color: #28a745; padding: 20px; text-align: center;\">\n        <div style=\"display: inline-block; background: rgba(255,255,255,0.2); border-radius: 50%; padding: 10px; margin-bottom: 10px;\">\n            <span style=\"color: white; font-size: 24px;\">✓</span>\n        </div>\n        <h2 style=\"color: white; margin: 0; font-size: 20px;\">Wallet Updated</h2>\n    </div>\n\n    <div style=\"padding: 30px;\">\n        <p style=\"color: #24292e; font-size: 16px; margin-top: 0;\">\n            Dear <b>{{ $('Wallet Address').item.json.formQueryParameters.party == 'Seller' ? ($('Lookup Case Wallet').item.json.Seller || 'Seller') : ($('Lookup Case Wallet').item.json.Buyer || 'Buyer') }}</b>,\n        </p>\n        \n        <p style=\"color: #586069; font-size: 14px; line-height: 1.6;\">\n            The payout wallet address for <b>Case #{{ $json['Case ID'] }}</b> has been successfully updated in our secure ledger.\n        </p>\n\n        <div style=\"background-color: #f6f8fa; border: 1px dashed #d1d5da; padding: 20px; border-radius: 8px; margin: 25px 0;\">\n            <span style=\"display: block; font-size: 12px; color: #6a737d; text-transform: uppercase; font-weight: bold; margin-bottom: 8px; letter-spacing: 0.5px;\">New Wallet Address</span>\n            <code style=\"display: block; font-family: 'Courier New', Courier, monospace; font-size: 14px; color: #0366d6; word-break: break-all; line-height: 1.4; user-select: all; -webkit-user-select: all;\">\n                {{ $('Wallet Address').item.json.wallet }}\n            </code>\n        </div>\n\n<div style=\"background-color: #fffbdd; border: 1px solid #fff5b1; padding: 15px; border-radius: 6px; margin-bottom: 25px;\">\n            <p style=\"margin: 0; font-size: 13px; color: #735c0f;\">\n                <b>Notice:</b> If this address is incorrect, please use your original update link to submit the correction immediately. \n            </p>\n        </div>\n    </div>\n\n    <div style=\"background-color: #f6f8fa; padding: 15px; border-top: 1px solid #e1e4e8; text-align: center;\">\n        <p style=\"font-size: 11px; color: #6a737d; margin: 0;\">\n            AI Arbitration Platform\n        </p>\n    </div>\n</div>",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "AI Arbitration Platform"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2256,
+        5008
+      ],
+      "id": "11ebf27d-9528-4319-8bfb-b89c217e6074",
+      "name": "To Submitter",
+      "webhookId": "717eaf70-3734-4e5e-843f-719266940413",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ANRO7cdYCJKI7fae",
+          "name": "Gmail: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "respondWith": "showText",
+        "responseText": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Invalid Wallet Address</title>\n  <style>\n    body {\n      font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif;\n      background: #f5f6f8;\n      margin: 0;\n      padding: 0;\n    }\n    .container {\n      max-width: 520px;\n      margin: 80px auto;\n      background: #ffffff;\n      padding: 32px;\n      border-radius: 12px;\n      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);\n      text-align: center;\n    }\n    .icon {\n      font-size: 48px;\n      color: #dc3545;\n      margin-bottom: 16px;\n    }\n    h1 {\n      font-size: 22px;\n      margin-bottom: 12px;\n      color: #333;\n    }\n    p {\n      color: #555;\n      font-size: 15px;\n      line-height: 1.6;\n    }\n    .hint {\n      background: #f8f9fa;\n      border-left: 4px solid #dc3545;\n      padding: 12px;\n      margin-top: 20px;\n      text-align: left;\n      font-size: 14px;\n    }\n    .footer {\n      margin-top: 24px;\n      font-size: 13px;\n      color: #888;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"icon\">⚠️</div>\n    <h1>Invalid Wallet Address</h1>\n    <p>\n      The Ethereum address you entered is not valid.\n    </p>\n\n    <div class=\"hint\">\n      <strong>Please check:</strong>\n      <ul>\n        <li>The address starts with <code>0x</code></li>\n        <li>It is exactly 42 characters long</li>\n        <li>No spaces or extra characters</li>\n      </ul>\n    </div>\n\n    <p class=\"footer\">\n      Please return to the link in your email and try again.\n    </p>\n  </div>\n</body>\n</html>\n"
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        1184,
+        5216
+      ],
+      "id": "3384727e-1a3e-4b00-b37a-0147bb5abb75",
+      "name": "Invalid Address",
+      "webhookId": "45f3a7ba-c210-4e1a-b142-500f36ac198a"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "783562ae-77af-4104-93e3-10f5b68abeb1",
+              "leftValue": "={{ $json.isValid }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        944,
+        5056
+      ],
+      "id": "3ac91527-6b62-434a-bbc1-72738fcd4157",
+      "name": "Wallet is Valid"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "df1c8a32-1343-4db0-9322-37ef9fbb2f3f",
+              "leftValue": "={{ $json['Case ID'] }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "0aa0c1b2-8138-4f22-a527-69414958c628",
+              "leftValue": "={{ $('Wallet Address').item.json.formQueryParameters.token }}",
+              "rightValue": "={{ $('Wallet Address').item.json.party == 'Seller' ? $json['Seller Token'] : $json['Buyer Token']}}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1632,
+        5024
+      ],
+      "id": "83bc1b6d-ad8b-4ab0-a5a9-4d8e0255d5c9",
+      "name": "Link is Valid"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "respondWith": "showText",
+        "responseText": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Error in the Link or Database</title>\n  <style>\n    body {\n      font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif;\n      background: #f5f6f8;\n      margin: 0;\n      padding: 0;\n    }\n    .container {\n      max-width: 540px;\n      margin: 80px auto;\n      background: #ffffff;\n      padding: 34px;\n      border-radius: 12px;\n      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);\n      text-align: center;\n    }\n    .icon {\n      font-size: 48px;\n      color: #e5533d;\n      margin-bottom: 18px;\n    }\n    h1 {\n      font-size: 22px;\n      margin-bottom: 12px;\n      color: #222;\n    }\n    p {\n      font-size: 15px;\n      color: #555;\n      line-height: 1.6;\n    }\n    .info {\n      background: #f9fafb;\n      border-left: 4px solid #e5533d;\n      padding: 14px;\n      margin-top: 20px;\n      text-align: left;\n      font-size: 14px;\n    }\n    .footer {\n      margin-top: 26px;\n      font-size: 13px;\n      color: #888;\n    }\n    code {\n      background: #eee;\n      padding: 2px 6px;\n      border-radius: 4px;\n      font-size: 13px;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"icon\">🚫</div>\n    <h1>Error in Link or Database</h1>\n\n<h3> Case ID: {{ $('Wallet Address').item.json.caseId }} </h3>\n    </p>\n\n    <div class=\"info\">\n      <strong>Possible reasons:</strong>\n      <ul>\n        <li>The case ID does not exist.</li>\n        <li>The link has expired.</li>\n        <li>The URL was copied incorrectly.</li>\n        <li>There is an error in the database.</li>\n      </ul>\n    </div>\n<h3> Try Again Later!</h3>\n\n    <p class=\"footer\">\n      Please return to your email and use the original link provided.<br />\n      If the problem persists, contact the arbitration administrator.\n    </p>\n  </div>\n</body>\n</html>\n"
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        1888,
+        5168
+      ],
+      "id": "ac543f27-748f-4334-9438-c89c107f3b34",
+      "name": "Invalid Link",
+      "webhookId": "45f3a7ba-c210-4e1a-b142-500f36ac198a"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "respondWith": "showText",
+        "responseText": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Submission Successful</title>\n  <style>\n    body {\n      font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif;\n      background: #f5f6f8;\n      margin: 0;\n      padding: 0;\n    }\n    .container {\n      max-width: 540px;\n      margin: 80px auto;\n      background: #ffffff;\n      padding: 34px;\n      border-radius: 12px;\n      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);\n      text-align: center;\n    }\n    .icon {\n      font-size: 48px;\n      color: #2fb344;\n      margin-bottom: 18px;\n    }\n    h1 {\n      font-size: 22px;\n      margin-bottom: 12px;\n      color: #222;\n    }\n    p {\n      font-size: 15px;\n      color: #555;\n      line-height: 1.6;\n    }\n    .summary {\n      margin-top: 20px;\n      background: #f6fdf8;\n      border-left: 4px solid #2fb344;\n      padding: 14px;\n      font-size: 14px;\n      text-align: left;\n    }\n    .footer {\n      margin-top: 26px;\n      font-size: 13px;\n      color: #888;\n    }\n    code {\n      background: #eef1f4;\n      padding: 2px 6px;\n      border-radius: 4px;\n      font-size: 13px;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"icon\">✅</div>\n    <h1>Wallet Address Submitted</h1>\n    <p>Your Ethereum address has been successfully recorded for case {{ $('Update Wallet').item.json['Case ID'] }}.</p>\n\n    <div class=\"summary\">\n      <strong>What happens next?</strong>\n      <ul>\n        <li>Your address is now linked to this case.</li>\n        <li>This address will be used for any fund transfer to you.</li>\n        <li>You can change this address using the same form.</li>\n      </ul>\n    </div>\n\n    <p class=\"footer\">\n      You may now close this page.<br />\n    </p>\n<p style=\"margin-top: 30px; text-align: center;\">\n  <span style=\"font-size: 11px; color: #888888; font-family: sans-serif; letter-spacing: 0.5px;\">\n    AI Arbitration Platform\n  </span>\n</p>\n  </div>\n\n</body>\n</html>\n"
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        2256,
+        4800
+      ],
+      "id": "3c5e3067-b63f-4524-8468-19dda376c932",
+      "name": "Success!",
+      "webhookId": "45f3a7ba-c210-4e1a-b142-500f36ac198a"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "5c00d19e-ead8-40d1-ac32-480f0edd442e",
+                    "leftValue": "={{ $json['Case ID'] }}",
+                    "rightValue": 0,
+                    "operator": {
+                      "type": "number",
+                      "operation": "empty",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Invalid Case ID "
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "25f7843a-d6db-4181-a5ee-e89d70d169db",
+                    "leftValue": "={{ $('Signature Response').item.json.query.token }}",
+                    "rightValue": "={{ $('Signature Response').item.json.query.party == 'Seller' ? $json['Seller Token'] : $json['Buyer Token']}}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEquals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Invalid Token"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "f2aaeb58-af5d-42e1-b22f-6be68f4e11e6",
+                    "leftValue": "={{ $json['Seller Response'] == 'decline' || $json['Buyer Response'] == 'decline' }}",
+                    "rightValue": "Declined",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Already Declined"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "5536bca8-4e37-4fa4-9835-e2bf639e1e59",
+                    "leftValue": "={{ $('Signature Response').item.json.query.party == 'Buyer' && $json['Buyer Response'] == ''}}",
+                    "rightValue": "true",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Buyer "
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "40aaad24-6b8c-499b-bc34-b6eb7c44b38f",
+                    "leftValue": "={{ $('Signature Response').item.json.query.party == 'Seller' && $json['Seller Response'] == ''}}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Seller"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "f6164520-daee-4804-b332-fe4e75e6d644",
+                    "leftValue": true,
+                    "rightValue": "=true\n",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Already Responded"
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {
+          "ignoreCase": true,
+          "allMatchingOutputs": false
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1248,
+        3840
+      ],
+      "id": "72ba20d4-2d0e-479f-bee6-72e5f378a874",
+      "name": "Case & Status"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{$('Lookup Case').item.json['Seller Email']}},{{$('Lookup Case').item.json['Buyer Email']}}",
+        "subject": "=Status Update for Case {{ $json.caseId }}",
+        "message": "=<div style=\"font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 20px auto; color: #24292e; border: 1px solid #e1e4e8; border-radius: 12px; background-color: #ffffff; overflow: hidden;\">\n    \n    <div style=\"background-color: #f6f8fa; padding: 30px; border-bottom: 1px solid #e1e4e8;\">\n        <span style=\"font-size: 12px; font-weight: bold; color: #0366d6; text-transform: uppercase; letter-spacing: 1px;\">Case Update</span>\n        <h2 style=\"margin: 10px 0 0 0; color: #1b1f23;\">Case #{{ $json.caseId }}</h2>\n    </div>\n\n    <div style=\"padding: 30px;\">\n        <div style=\"background-color: #fbfcb540; border: 1px solid #f1e05a; border-radius: 8px; padding: 20px;\">\n            <h4 style=\"margin: 0 0 15px 0; font-size: 15px; color: #735c0f;\">Latest Responses</h4>\n            \n            <div style=\"margin-bottom: 15px;\">\n                <b style=\"font-size: 12px; color: #586069; display: block; margin-bottom: 4px;\">BUYER STATUS</b>\n                <div style=\"font-size: 14px; padding: 8px; background: white; border-radius: 4px; border: 1px solid #e1e4e8;\">\n                {{ $json.buyerResponse }}\n                </div>\n            </div>\n\n            <div>\n                <b style=\"font-size: 12px; color: #586069; display: block; margin-bottom: 4px;\">SELLER STATUS</b>\n                <div style=\"font-size: 14px; padding: 8px; background: white; border-radius: 4px; border: 1px solid #e1e4e8;\">\n                 {{ $json.sellerResponse }}\n                </div>\n            </div>\n        </div>\n<br/>\n        <div style=\"margin-bottom: 30px;\">\n              \n            <p style=\"font-size: 13px; color: #586069; margin-top: 10px;\">\n                Deposited: <b>{{ $json.depositedETH }}</b> ETH \n                of <b> {{ $json.totalRequiredETH }} </b> ETH\n            </p>\n        </div>\n\n{{ $json.actionHtml }}\n\n        <p style=\"margin-top: 30px; font-size: 14px; color: #24292e;\">\n            Thank you for your attention to this matter.\n        </p>\n        \n\n\n    </div>\n    <div style=\"background-color: #f6f8fa; padding: 15px 30px; border-top: 1px solid #e1e4e8; text-align: center;\">\n  <span style=\"font-size: 11px; color: #888888; font-family: sans-serif; letter-spacing: 0.5px;\">\n    AI Arbitration Platform\n  </span>\n    </div>\n</div>",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "AI Arbitration Platform"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2400,
+        4016
+      ],
+      "id": "dd705e8d-5a96-4bc4-ace3-54b08450a585",
+      "name": "Status Message",
+      "webhookId": "427d552d-d161-467a-a963-9c053fab495f",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ANRO7cdYCJKI7fae",
+          "name": "Gmail: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ==============================\n// 1. Load Case Data\n// ==============================\nconst caseRow = $('Lookup Case').first().json;\n\nconst caseId = caseRow['Case ID'];\nconst deposited = Number(caseRow['Deposited Fund'] || 0);\nconst escrowWei = Number(caseRow['Escrow Fund'] || 0);\nconst feeWei = Number(caseRow['Fee'] || 0);\n\nconst escrowEth = (escrowWei / 1e18);\nconst feeEth = (feeWei / 1e18);\nconst totalRequiredETH = (escrowWei + feeWei)/1e18;\nconst depositedETH = deposited / 1e18;\n\n// ==============================\n// 2. Party & Response Resolution\n// ==============================\nconst signNode = $('Signature Response').first().json;\nconst currentParty = signNode.query.party;\nconst currentAction = signNode.query.action;\n\nconst sellerResponse =\n  caseRow['Seller Response'] ||\n  (currentParty === 'Seller' ? currentAction : 'awaiting response');\n\nconst buyerResponse =\n  caseRow['Buyer Response'] ||\n  (currentParty === 'Buyer' ? currentAction : 'awaiting response');\n\n// ==============================\n// 3. Build Deposit URL\n// ==============================\nconst baseWebhookUrl = signNode.webhookUrl.replace(/\\/[^/]*$/, '');\nconst depositUrl =\n  `${baseWebhookUrl}/deposit?caseId=${encodeURIComponent(caseId)}`;\n\n// ==============================\n// 4. Conditional HTML Block\n// ==============================\nlet actionHtml = '';\n\nif (sellerResponse === 'accept' && buyerResponse === 'accept') {\n  actionHtml = `\n  <div style=\"margin-top:30px;padding:24px;background:#f8fbff;border:1px solid #d0e3ff;border-radius:10px;\">\n    <h4 style=\"margin:0 0 12px 0;color:#0056b3;\">\n     Legal Effectiveness Notice\n    </h4>\n    <p style=\"font-size:14px;color:#33475b;line-height:1.6;\">\n      Both parties have accepted the contract.\n      <br/><br/>\n      Buyer must deposit:\n      <strong>${escrowEth} ETH</strong> escrow  \n      + <strong>${feeEth} ETH</strong> fee.\n      <br/><br/>\n      Once the full amount is received, the case will become <strong>effective</strong>.\n    </p>\n    <a href=\"${depositUrl}\"\n       style=\"display:inline-block;margin-top:14px;padding:12px 20px;\n              background:#0056b3;color:#fff;text-decoration:none;\n              border-radius:6px;font-weight:600;\">\n      Deposit Ether\n    </a>\n  </div>`;\n}\n\n// ==============================\n// 5. Return for Email Node\n// ==============================\nreturn {\n  baseWebhookUrl,\n  caseId,\n  sellerResponse,\n  buyerResponse,\n  depositedETH,\n  totalRequiredETH,\n  actionHtml\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2144,
+        3936
+      ],
+      "id": "fb0b4fff-60d1-48dc-b3c1-bed6fbb7c0b3",
+      "name": "Generate HTML"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=<div style=\"font-family: Arial, sans-serif; line-height: 1.6; color: #333;\">\n  <h2 style=\"color: #CC3333; border-bottom: 2px solid #eee; padding-bottom: 10px;\">\n    \nError in Link or Database. <br/> \nTry again later!\n</h2>\n  <h3 style=\"color: #0033FF; border-bottom: 2px solid #eee; padding-bottom: 10px;\">\n    \nCase ID: {{ $('Signature Response').item.json.query.caseId }}\n  </h3>\n \n  \n  <p style=\"margin-top: 20px; font-size: 12px; color: #777;\">\n    This is an automated notification from the Arbitration System.\n  </p>\n</div>\n<p style=\"margin-top: 30px; text-align: center;\">\n  <span style=\"font-size: 11px; color: #888888; font-family: sans-serif; letter-spacing: 0.5px;\">\n    AI Arbitration Platform\n  </span>\n</p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1584,
+        3552
+      ],
+      "id": "dd268b4e-6bee-4efb-a741-6b4c1bbd6501",
+      "name": "Invalid Link/Case"
+    },
+    {
+      "parameters": {
+        "sendTo": "=ceo@texasbc.org",
+        "subject": "=Error in GET Google Sheet",
+        "message": "=<div style=\"font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;\">\n    <div style=\"background-color: #DE350B; color: white; padding: 20px; text-align: center;\">\n        <h2 style=\"margin: 0;\">Google Sheet Error</h2>\n    </div>\n    \n    <div style=\"padding: 30px; line-height: 1.6; color: #333;\">\n        <p>An error occurred while calling <strong> GET in Google Sheet</strong>.</p>\n\n            <p style=\"padding: 8px; border-bottom: 1px solid #EEE;\"><strong>Case ID:</strong>\n            #{{ $('Signature Response').item.json.query.caseId }} </p>\n\n            <p style=\"padding: 8px; border-bottom: 1px solid #EEE;\"><strong>Message:</strong> {{ $json.message }}\n           </p>\n            <p style=\"padding: 8px; border-bottom: 1px solid #EEE;\"><strong>Result:</strong> {{ $json.result }}\n           </p>\n        </div>\n\n        \n        <div style=\"background-color: #f8f9fa; padding: 15px; border-left: 4px solid #DE350B; margin: 20px 0;\">\n            <strong>Error Details:</strong><br>\n            <code style=\"word-break: break-all; color: #DE350B;\">\n                {{ \n                   $json.error?.message ? $json.error.message : \n                   (typeof $json.error === 'string' ? $json.error : JSON.stringify($json.error)) \n                }}\n            </code>\n        </div>\n\n        <p style=\"font-size: 14px;\"><strong>Full Technical Context:</strong></p>\n        <pre style=\"background: #2D3436; color: #00D1FF; padding: 15px; border-radius: 5px; font-size: 11px; overflow-x: auto;\">\n{{ JSON.stringify($json, null, 2) }}\n        </pre>\n    </div>\n    \n    <div style=\"background-color: #f4f4f4; padding: 15px; text-align: center; font-size: 12px; color: #666;\">\n        Timestamp: {{ new Date().toISOString() }}\n    </div>\n</div>",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "Arbitration System"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1072,
+        4112
+      ],
+      "id": "f7fef557-ab6c-4274-aee5-cf84dceba4d5",
+      "name": "Admin Sheet",
+      "webhookId": "717eaf70-3734-4e5e-843f-719266940413",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ANRO7cdYCJKI7fae",
+          "name": "Gmail: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ",
+          "mode": "list",
+          "cachedResultName": "Arbitration",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1664223804,
+          "mode": "list",
+          "cachedResultName": "Cases",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ/edit#gid=1664223804"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Case ID",
+              "lookupValue": "={{ $json.query.caseId }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        816,
+        3920
+      ],
+      "id": "0a145ed7-95cd-47c7-83c8-65573d39e906",
+      "name": "Lookup Case",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "maxTries": 2,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8PyGKtbWRXXj7YKz",
+          "name": "Sheets: governplanet"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "content": "# Create a Case\n\n**Trigger:** Form Submission\nThis provides the starting link to the application.\n\n### Automated Actions:\n  * A case ID is generated.\n  * A Folder with that name is created.\n  * The contract is uploaded into that folder.\n  * The information is stored in a database / sheet.\n  * An Email with proper links is sent to both parties. \n\n### Links in each Emails:\n  * The Google Drive folder (view only)\n  * Accept and Decline buttons\n  * Submit Wallet Address\n  * Deposit Escrow Fund (to Buyer only)\n\n\n### Terminology:\n  * **Seller** can be a worker, freelancer, contractor, employee, etc.\n  * **Buyer** can be a client, company, employer, customer, etc.",
+        "height": 1040,
+        "width": 2720,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        64,
+        2192
+      ],
+      "typeVersion": 1,
+      "id": "5a09983a-aa07-4f64-975f-640644636eee",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "# Signature Response\n\n**Trigger:** Accept and Decline Buttons\nThis enables the parties to Accept or Decline the contract.\n\n### Once the user selects a choice (clicks on a button):\n  * Checks if the user has already responded to prevent duplicates.\n  * The response is stored if had not responded before. \n  * If either party declines, the case is cancelled and both parties are notified.\n  * If both parties accept, the deposit link is sent to both parties. \n  * By default, the buyer is expected to deposit the escrow fund plus fees.",
+        "height": 976,
+        "width": 2720,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        48,
+        3440
+      ],
+      "typeVersion": 1,
+      "id": "03046e4f-1194-477a-aff7-6a5f9b07cc93",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "path": "signature-response",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        576,
+        3920
+      ],
+      "id": "2740b83b-02f3-4bd0-9b9e-c2b697caadc2",
+      "name": "Signature Response",
+      "webhookId": "signature-response"
+    },
+    {
+      "parameters": {
+        "sendTo": "=ceo@texasbc.org",
+        "subject": "=Error in GET Google Sheet",
+        "message": "=<div style=\"font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;\">\n    <div style=\"background-color: #DE350B; color: white; padding: 20px; text-align: center;\">\n        <h2 style=\"margin: 0;\">Google Sheet Error</h2>\n    </div>\n    \n    <div style=\"padding: 30px; line-height: 1.6; color: #333;\">\n        <p>An error occurred while calling <strong> GET in Google Sheet</strong>.</p>\n\n            <p style=\"padding: 8px; border-bottom: 1px solid #EEE;\"><strong>Case ID:</strong>\n            #{{ $('Wallet Address').item.json.caseId }} </p>\n\n            <p style=\"padding: 8px; border-bottom: 1px solid #EEE;\"><strong>Message:</strong> {{ $json.message }}\n           </p>\n            <p style=\"padding: 8px; border-bottom: 1px solid #EEE;\"><strong>Result:</strong> {{ $json.result }}\n           </p>\n        </div>\n\n        \n        <div style=\"background-color: #f8f9fa; padding: 15px; border-left: 4px solid #DE350B; margin: 20px 0;\">\n            <strong>Error Details:</strong><br>\n            <code style=\"word-break: break-all; color: #DE350B;\">\n                {{ \n                   $json.error?.message ? $json.error.message : \n                   (typeof $json.error === 'string' ? $json.error : JSON.stringify($json.error)) \n                }}\n            </code>\n        </div>\n\n        <p style=\"font-size: 14px;\"><strong>Full Technical Context:</strong></p>\n        <pre style=\"background: #2D3436; color: #00D1FF; padding: 15px; border-radius: 5px; font-size: 11px; overflow-x: auto;\">\n{{ JSON.stringify($json, null, 2) }}\n        </pre>\n    </div>\n    \n    <div style=\"background-color: #f4f4f4; padding: 15px; text-align: center; font-size: 12px; color: #666;\">\n        Timestamp: {{ new Date().toISOString() }}\n    </div>\n</div>",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "Arbitration System"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1536,
+        5200
+      ],
+      "id": "51136230-c27c-4dbd-8fbc-456c4de68b2a",
+      "name": "Admin Sheet1",
+      "webhookId": "717eaf70-3734-4e5e-843f-719266940413",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ANRO7cdYCJKI7fae",
+          "name": "Gmail: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# Wallet Address\n\n**Trigger:** Link in the emails sent to parties opens a form. \nThis form enables each party to set and update their wallet address.\n\n### Once the user submits the wallet address:\n  * The address is checked to be valid.\n  * The valid address is stored in the database / sheet. \n  * The user can change it using the same form. \n",
+        "height": 976,
+        "width": 2720,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        64,
+        4608
+      ],
+      "typeVersion": 1,
+      "id": "efa9ad22-5866-4f7d-90f6-72c1f5782b99",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "formTitle": "Submit Wallet Address",
+        "formDescription": "=Add or update your wallet address for this case.  \n(You can generate an address on: vanity-eth.tk)",
+        "formFields": {
+          "values": [
+            {
+              "fieldName": "caseId",
+              "fieldLabel": "Case ID",
+              "requiredField": true
+            },
+            {
+              "fieldName": "party",
+              "fieldLabel": "Party",
+              "fieldType": "dropdown",
+              "defaultValue": "Seller",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Seller"
+                  },
+                  {
+                    "option": "Buyer"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldName": "wallet",
+              "fieldLabel": "Ethereum Wallet Address",
+              "placeholder": "0x85CFd914F0357ffabE21698714a29D580EF71F6d",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "appendAttribution": false,
+          "path": "wallet",
+          "respondWithOptions": {
+            "values": {
+              "formSubmittedText": "=Submitted\n\n"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.4,
+      "position": [
+        528,
+        5056
+      ],
+      "id": "7abbfca0-d657-403a-8530-ec3ab94fa698",
+      "name": "Wallet Address",
+      "webhookId": "abf03d5d-ab9a-4f8d-976c-38ada2b5f5b6",
+      "alwaysOutputData": false,
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "formTitle": "Initial Set Up",
+        "formDescription": "Do you want to set up a new AI Arbitration Platform from scratch?",
+        "responseMode": "lastNode",
+        "options": {
+          "appendAttribution": false,
+          "buttonLabel": "Yes, proceed!",
+          "path": "25d96d60-0ed3-468b-b7a0-9018c9726739"
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        816,
+        720
+      ],
+      "id": "f10b90f1-4299-4ffc-870e-8a72f64e7b98",
+      "name": "Initiate",
+      "webhookId": "25d96d60-0ed3-468b-b7a0-9018c9726739"
+    },
+    {
+      "parameters": {
+        "resource": "spreadsheet",
+        "title": "Arbitration",
+        "sheetsUi": {
+          "sheetValues": [
+            {
+              "title": "Cases"
+            },
+            {
+              "title": "Messages"
+            },
+            {
+              "title": "Files"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1168,
+        544
+      ],
+      "id": "f3b6b160-9e21-482b-9db3-a1df5a2eb95a",
+      "name": "Create the Spreadsheet",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8PyGKtbWRXXj7YKz",
+          "name": "Sheets: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"Case ID (FK)\": 0,\n  \"Time\": {{$now}}, \n  \"Submitter\": \"Admin\", \n  \"Email\": \"ceo@texasbc.org\", \n  \"Original Name\": \"\", \n  \"Secure Name\": \"\", \n  \"ID\": \"\", \n  \"Message: \"\", \n  \"Hash\": \"\" \n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1584,
+        544
+      ],
+      "id": "6e3d9791-a6a2-4d8b-bd5a-2e692813fc2e",
+      "name": "Columns for Files Sheet",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Create the Spreadsheet').item.json.spreadsheetId }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('Create the Spreadsheet').item.json.sheets[2].properties.sheetId }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Case ID",
+              "displayName": "Case ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Link",
+              "displayName": "Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Submitter",
+              "displayName": "Submitter",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Role",
+              "displayName": "Role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Hash",
+              "displayName": "Hash",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Verification",
+              "displayName": "Verification",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "locationDefine": {
+            "values": {}
+          },
+          "handlingExtraData": "insertInNewColumn"
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1872,
+        544
+      ],
+      "id": "3ba03651-18a7-4f56-b083-281615cb1d81",
+      "name": "Create Columns for Files",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8PyGKtbWRXXj7YKz",
+          "name": "Sheets: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "Sheet and Folder Created",
+        "completionMessage": "=<h3>Here are the Google links: </h3>\n<br><br>\n\nGoogle Sheet:<br> {{ $json.spreadsheetUrl }}\n<br><br>\n\nGoogle Drive:<br> {{ $json.webViewLink }}\n<br>\n<p style=\"margin-top: 30px; text-align: center;\">\n  <span style=\"font-size: 11px; color: #888888; font-family: sans-serif; letter-spacing: 0.5px;\">\n<br>\n\n    AI Arbitration Platform\n  </span>\n</p>",
+        "options": {
+          "formTitle": "Links for n8n nodes"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        1872,
+        752
+      ],
+      "id": "922bebe7-3839-47d4-95f6-a66af2b9c391",
+      "name": "Show the Links",
+      "webhookId": "bc5f5b4a-4057-4291-a3dc-17c8a3960a64"
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "name": "Arbitration Cases",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "root",
+          "cachedResultName": "/ (Root folder)"
+        },
+        "options": {
+          "simplifyOutput": false
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1168,
+        928
+      ],
+      "id": "86c96b1b-4d75-4afe-80e7-c7c96eecb910",
+      "name": "Create the Main Folder",
+      "executeOnce": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "DaYtvl0uWvCtS30q",
+          "name": "Drive: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# Setting Up the Automated Arbitration System\n\n**Trigger:** Form Submission\nRun this workflow only once to start a clean arbitration system with no case. \n\n### Google Sheets File: \n  * Create a Google Sheets file.\n  * Creates 3 tables/sheets/tabs in it. \n  * Creates the required columns in each sheet.\n\n### Google Drive Folder: \n  * Creates the main Google Drive folder.\n  * Makes it public.\n\n\n### Final Page:\n  * Shows the links to the created file and folder to the user. ",
+        "height": 1376,
+        "width": 2720,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "0db5af3c-d9bd-49e3-9580-12a1e419c1bf",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1568,
+        912
+      ],
+      "id": "28d548fc-a76e-485c-a4e1-b8006380eb11",
+      "name": "Merge3"
+    },
+    {
+      "parameters": {
+        "content": "# Case Status Codes:\n\n## **0** - **CREATED**: \nCase made but not signed nor funded\n\n## **1** - **SIGNED**: \nBoth parties signed the contract but not funded\n\n## **2** - **EFFECTIVE**: \nBoth parties signed the contract and funded\n\n## **3** - **TRANSFERRED**: \nAll the escrow fund transferred to a party/parties\n\n## **4** - **REQUESTED**: \nOne side requested transfer of the escrow fund\n\n## **5** - **DISPUTED**: \nOne side has initiated a dispute\n\n## **6** - **PROCESSING**: \nCase sent to the Magistrate Judge for Investigation\n\n## **7** - **DECIDED**: \nJudgement made \n\n## **8** - **UNDER REVIEW**: \nA human is reviewing the judgement and ruling after a procedural objection\n\n## **9** - **DISTRIBUTED**: \nAll funds distributed to party/parties\n\n",
+        "height": 1040,
+        "width": 912,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3504,
+        16
+      ],
+      "typeVersion": 1,
+      "id": "2f58d8b3-23ba-4c62-8373-d6a6875876f8",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "operation": "share",
+        "folderNoRootId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "permissionsUi": {
+          "permissionsValues": {
+            "role": "reader",
+            "type": "anyone",
+            "allowFileDiscovery": true
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1872,
+        912
+      ],
+      "id": "28cf6cbd-ddb7-40f4-88b0-b98d9ecc9afe",
+      "name": "Public Access",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "DaYtvl0uWvCtS30q",
+          "name": "Drive: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "binaryData": true,
+        "binaryPropertyName": "=ContractFile",
+        "dataPropertyName": "=fileHash"
+      },
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 2,
+      "position": [
+        1888,
+        2320
+      ],
+      "id": "4b3a022c-7d7c-4c48-88ea-0746b087b14e",
+      "name": "Crypto1",
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2112,
+        2464
+      ],
+      "id": "5798c7e8-90ed-4bb0-9763-653da523d778",
+      "name": "Merge6"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Create the Spreadsheet').item.json.spreadsheetId }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('Create the Spreadsheet').item.json.sheets[1].properties.sheetId }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Case ID",
+              "displayName": "Case ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Seller",
+              "displayName": "Seller",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Buyer",
+              "displayName": "Buyer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Seller Email",
+              "displayName": "Seller Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Buyer Email",
+              "displayName": "Buyer Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Seller Wallet",
+              "displayName": "Seller Wallet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Buyer Wallet",
+              "displayName": "Buyer Wallet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Contract Text",
+              "displayName": "Contract Text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Seller Response",
+              "displayName": "Seller Response",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Buyer Response",
+              "displayName": "Buyer Response",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Folder Link",
+              "displayName": "Folder Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Escrow Address",
+              "displayName": "Escrow Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Escrow Fund",
+              "displayName": "Escrow Fund",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Fee",
+              "displayName": "Fee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Deposited Fund",
+              "displayName": "Deposited Fund",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Buyer Withdrawal",
+              "displayName": "Buyer Withdrawal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Tip to Seller",
+              "displayName": "Tip to Seller",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Payment to Seller",
+              "displayName": "Payment to Seller",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Refund to Buyer",
+              "displayName": "Refund to Buyer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Fine Paid",
+              "displayName": "Fine Paid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Refund Request Time",
+              "displayName": "Refund Request Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Payment Request Time",
+              "displayName": "Payment Request Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Seller Token",
+              "displayName": "Seller Token",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Buyer Token",
+              "displayName": "Buyer Token",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "locationDefine": {
+            "values": {}
+          },
+          "handlingExtraData": "insertInNewColumn"
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1872,
+        336
+      ],
+      "id": "12d7cbc8-667a-4684-bc57-a8bbc03f08d0",
+      "name": "Create Columns for Messages",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8PyGKtbWRXXj7YKz",
+          "name": "Sheets: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "=  {\n    \"Case ID (FK)\": 0,\n    \"Time\": {{$now}},\n    \"Sender\": \"Admin\",\n    \"Email\": \"ceo@texasbc.org\",\n    \"Content\": \" \", \n    \"Label\": \"Setup\"\n  }",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1584,
+        336
+      ],
+      "id": "a5e188ad-095a-406a-8672-17b1a70873eb",
+      "name": "Columns for Messages Sheet",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "=  {\n    \"Case ID\": 0,\n    \"Time\": {{$now}},\n    \"Seller\": \"Admin\",\n    \"Buyer\": \"User\",\n    \"Seller Email\": \"ceo@texasbc.org\",\n    \"Buyer Email\": \"dr.blockchain@icloud.com\",\n    \"Seller Token\": \"ars82vtl7wvw0tqg4d9hc\",\n    \"Buyer Token\": \"6hg24vvz6kb77msb8cdnov\",\n    \"Seller Wallet\": \"0xdd1c06a20338eb7ee164a9787e19a92039af7a0f\",\n    \"Buyer Wallet\": \"0x5755b81b6ad6b68154ba0ca1bdfb24ea5f72375c\",\n    \"Contract Text\": \"1\\r\\n2\\r\\n\",\n    \"Seller Response\": \"decline\",\n    \"Buyer Response\": \"accept\",\n    \"Folder Link\": \"\",\n    \"Escrow Address\": \"0x45A74c8D85B0D532D39cc7d105Eec4aeF4Ef9441\",\n    \"Escrow Fund\": 0,\n    \"Fee\": 1000000000000000,\n    \"Deposited Fund\": 0,\n    \"Payment to Seller\": 0,\n    \"Refund to Buyer\": 0,\n    \"Tip to Seller\": 0,\n    \"Buyer Withdrawal\": 0,\n    \"Status\": \"\",\n    \"Payment Request Time\": \"\",\n    \"Refund Request Time\": \"\",\n    \"Dispute Time\": \"2026-01-07T02:27:43.147-05:02\",\n    \"Adjudication Time\": \"\",\n    \"Determination Time\": \"\",\n    \"Decision\": \"\",\n    \"Seller Award\": 0,\n    \"Buyer Award\": 0,\n    \"Seller Payout\": 0,\n    \"Buyer Payout\": 0,\n    \"Appeal Time\": \"\"\n  }\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1584,
+        128
+      ],
+      "id": "d9c4fc00-1c2c-4795-b922-3a30aa673471",
+      "name": "Columns for Cases Sheet",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "={{ $('Create the Spreadsheet').item.json.spreadsheetId }}",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ $('Create the Spreadsheet').item.json.sheets[0].properties.sheetId }}",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Case ID",
+              "displayName": "Case ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Seller",
+              "displayName": "Seller",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Buyer",
+              "displayName": "Buyer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Seller Email",
+              "displayName": "Seller Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Buyer Email",
+              "displayName": "Buyer Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Seller Wallet",
+              "displayName": "Seller Wallet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Buyer Wallet",
+              "displayName": "Buyer Wallet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Contract Text",
+              "displayName": "Contract Text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Seller Response",
+              "displayName": "Seller Response",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Buyer Response",
+              "displayName": "Buyer Response",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Folder Link",
+              "displayName": "Folder Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Escrow Address",
+              "displayName": "Escrow Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Escrow Fund",
+              "displayName": "Escrow Fund",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Fee",
+              "displayName": "Fee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Deposited Fund",
+              "displayName": "Deposited Fund",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Buyer Withdrawal",
+              "displayName": "Buyer Withdrawal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Tip to Seller",
+              "displayName": "Tip to Seller",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Payment to Seller",
+              "displayName": "Payment to Seller",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Refund to Buyer",
+              "displayName": "Refund to Buyer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Fine Paid",
+              "displayName": "Fine Paid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Refund Request Time",
+              "displayName": "Refund Request Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Payment Request Time",
+              "displayName": "Payment Request Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Seller Token",
+              "displayName": "Seller Token",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Buyer Token",
+              "displayName": "Buyer Token",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "locationDefine": {
+            "values": {}
+          },
+          "handlingExtraData": "insertInNewColumn"
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1872,
+        128
+      ],
+      "id": "15c835ec-1ab8-402f-8599-66cec3299ebb",
+      "name": "Create Columns for Cases",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8PyGKtbWRXXj7YKz",
+          "name": "Sheets: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "move",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.spreadsheetId }}",
+          "mode": "id"
+        },
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $json.webViewLink }}",
+          "mode": "url"
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1872,
+        1088
+      ],
+      "id": "056a9b0f-53cd-4870-9c40-b3a6eb51ddb0",
+      "name": "Move file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "DaYtvl0uWvCtS30q",
+          "name": "Drive: governplanet"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "17d8f454-f8d9-4b25-b2fa-a50ff2593410",
+              "leftValue": "={{ $binary.ContractFile }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        1664,
+        2480
+      ],
+      "id": "91823a51-6dc4-4d98-9cf0-631f3eb7d928",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "Case Created",
+        "completionMessage": "=<div class=\"success-card\">\n  <div class=\"status-icon-wrap\">\n    <div class=\"status-icon\">✓</div>\n  </div>\n  \n  <h1>Contract Registered</h1>\n  <p class=\"reference\">Case ID: <code>{{ $json.caseId }}</code></p>\n\n  <div class=\"instructions-box\">\n    <strong>Next Steps & Requirements</strong>\n    <ul>\n      <li>Contract details have been released to both parties via email.</li>\n      <li>Each party must review and formally accept the terms.</li>\n      <li><b>Buyer</b> is required to remit escrow funds plus platform fees.</li>\n      <li>The contract becomes effective only upon completion of all steps.</li>\n    </ul>\n  </div>\n\n</div>\n\n<p style=\"margin-top: 40px; text-align: center;\">\n  <span style=\"font-size: 11px; color: #9ca3af; font-family: sans-serif; letter-spacing: 1px; text-transform: uppercase;\">\n    AI Arbitration Platform\n  </span>\n</p>\n\n<style>\n  body { background-color: #f3f4f6; padding: 20px; }\n  .success-card {\n    max-width: 500px;\n    margin: 60px auto;\n    padding: 40px;\n    background: white;\n    border-radius: 16px;\n    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);\n    text-align: center;\n    font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif;\n  }\n  \n  .status-icon-wrap {\n    width: 64px;\n    height: 64px;\n    background: #dcfce7;\n    color: #166534;\n    border-radius: 50%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    margin: 0 auto 20px;\n    font-size: 32px;\n    font-weight: bold;\n  }\n\n  h1 { color: #111827; font-size: 24px; margin: 0 0 8px 0; font-weight: 700; }\n  .reference { color: #6b7280; font-size: 15px; margin-bottom: 30px; }\n  code { background: #f3f4f6; padding: 4px 8px; border-radius: 6px; color: #111827; font-family: monospace; font-size: 14px; border: 1px solid #e5e7eb; }\n\n  .instructions-box {\n    background: #f9fafb;\n    border: 1px solid #f3f4f6;\n    border-radius: 12px;\n    padding: 24px;\n    text-align: left;\n    margin-bottom: 30px;\n  }\n  .instructions-box strong {\n    display: block;\n    margin-bottom: 16px;\n    color: #374151;\n    font-size: 14px;\n    text-transform: uppercase;\n    letter-spacing: 0.05em;\n  }\n  ul { margin: 0; padding-left: 18px; }\n  li { margin-bottom: 12px; color: #4b5563; font-size: 14px; line-height: 1.6; }\n\n  .primary-button {\n    display: inline-block;\n    background-color: #2563eb;\n    color: white;\n    padding: 12px 24px;\n    border-radius: 8px;\n    text-decoration: none;\n    font-weight: 600;\n    font-size: 15px;\n    transition: background 0.2s;\n  }\n  .primary-button:hover { background-color: #1d4ed8; }\n</style>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        1664,
+        2240
+      ],
+      "id": "c5e36f07-cd82-4314-abe4-9b052fcf7dea",
+      "name": "Success",
+      "webhookId": "c66af29b-be19-4cda-a23c-2533bdafca46"
+    },
+    {
+      "parameters": {
+        "path": "terms",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        2144,
+        2736
+      ],
+      "id": "f191efb2-e3f5-4887-b0d7-f58e2d7235d5",
+      "name": "Terms Link",
+      "webhookId": "signature-response"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\" />\n  <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\" />\n  <title>Arbitration Agreement</title>\n  <style>\n    :root {\n      --text: #111827;\n      --muted: #4b5563;\n      --border: #e5e7eb;\n      --bg: #ffffff;\n      --bg2: #f9fafb;\n      --link: #2563eb;\n    }\n    body {\n      margin: 0;\n      font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Arial, sans-serif;\n      color: var(--text);\n      background: var(--bg2);\n      line-height: 1.55;\n    }\n    .wrap {\n      max-width: 920px;\n      margin: 32px auto;\n      padding: 0 16px;\n    }\n    .card {\n      background: var(--bg);\n      border: 1px solid var(--border);\n      border-radius: 14px;\n      padding: 28px;\n      box-shadow: 0 1px 2px rgba(0,0,0,.04);\n    }\n    h1 {\n      margin: 0 0 4px 0;\n      font-size: 22px;\n      letter-spacing: .2px;\n    }\n    .subtitle {\n      margin: 0 0 22px 0;\n      color: var(--muted);\n      font-size: 14px;\n    }\n    h2 {\n      margin: 22px 0 8px 0;\n      font-size: 16px;\n    }\n    p { margin: 8px 0; }\n    ul { margin: 8px 0 8px 20px; }\n    li { margin: 6px 0; }\n    hr {\n      border: none;\n      border-top: 1px solid var(--border);\n      margin: 18px 0;\n    }\n    .meta {\n      margin-top: 18px;\n      padding: 12px 14px;\n      background: var(--bg2);\n      border: 1px solid var(--border);\n      border-radius: 12px;\n      color: var(--muted);\n      font-size: 12px;\n    }\n    a { color: var(--link); }\n  </style>\n</head>\n<body>\n  <div class=\"wrap\">\n    <div class=\"card\">\n      <h1>BINDING ARBITRATION AGREEMENT</h1>\n      <div class=\"subtitle\">(AI Arbitration Platform)</div>\n\n      <h2>1. Agreement to Arbitrate</h2>\n      <p>\n        By submitting a contract, accepting terms, depositing escrow funds, or otherwise using the Platform, each Party\n        irrevocably agrees that any dispute arising out of or relating to the submitted contract shall be resolved\n        exclusively through binding arbitration conducted via the Platform.\n      </p>\n      <p>\n        This Agreement is governed by the Federal Arbitration Act (9 U.S.C. §1 et seq.).\n      </p>\n      <p>\n        The Parties knowingly and voluntarily waive the right to litigate in court, including the right to a jury trial,\n        except solely for enforcement of a Final Award.\n      </p>\n\n      <h2>2. AI Arbitrator and HITL Review</h2>\n      <p>\n        The Parties expressly consent to arbitration conducted by automated artificial intelligence systems.\n      </p>\n      <p>\n        The Platform may use Large Language Models (LLMs), machine learning systems, and other AI tools to:\n      </p>\n      <ul>\n        <li>Review submissions</li>\n        <li>Analyze evidence</li>\n        <li>Interpret contractual terms</li>\n        <li>Determine liability</li>\n        <li>Calculate and issue awards</li>\n      </ul>\n      <p>\n        A designated Human-in-the-Loop (“HITL”) reviewer may review and revert an AI determination. If reverted, the\n        matter may be reassigned to the same or a different AI system for redetermination.\n      </p>\n      <p>\n        A determination not reverted by a HITL reviewer, or a determination issued following redetermination,\n        constitutes the Final Award.\n      </p>\n\n      <h2>3. Procedure</h2>\n      <p>Arbitration is initiated and conducted electronically.</p>\n      <p>Electronic notice to the registered email address constitutes valid and sufficient service.</p>\n      <p>No in-person hearing shall be required unless mandated by applicable law.</p>\n      <p>\n        Texas is designated as the legal seat of arbitration, and Texas law governs to the extent not preempted by the\n        Federal Arbitration Act.\n      </p>\n\n      <h2>4. Finality and Enforcement</h2>\n      <p>\n        The Final Award is final, binding, and enforceable. Judgment upon the Final Award may be entered in any court of\n        competent jurisdiction.\n      </p>\n      <p>\n        The Parties waive all appellate or review rights except those expressly permitted under the Federal Arbitration Act.\n      </p>\n      <p>Class, collective, and representative proceedings are prohibited.</p>\n\n      <h2>5. Escrow Authority</h2>\n      <p>\n        If escrow funds are deposited into the designated wallet, the Parties irrevocably authorize automated distribution\n        of such funds in accordance with the Final Award.\n      </p>\n\n      <h2>6. Fees</h2>\n      <p>\n        All administrative, filing, and processing fees are strictly non-refundable, regardless of outcome, withdrawal,\n        settlement, review, or redetermination.\n      </p>\n\n      <h2>7. Electronic Consent</h2>\n      <p>\n        By clicking “Accept,” “Confirm,” submitting escrow funds, or otherwise indicating assent, each Party provides\n        legally binding electronic consent under the U.S. E-SIGN Act and applicable Texas electronic transaction laws,\n        with the same force and effect as a handwritten signature.\n      </p>\n\n      <h2>8. Severability and Survival</h2>\n      <p>\n        If any provision is deemed unenforceable, the remaining provisions shall remain in full force and effect.\n      </p>\n      <p>\n        This Arbitration Agreement survives termination of the contract and resolution of the dispute.\n      </p>\n    </div>\n  </div>\n</body>\n</html>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        2368,
+        2736
+      ],
+      "id": "5f01d75c-cf62-4e7f-bc95-a2ee6e26ab53",
+      "name": "Terms"
+    },
+    {
+      "parameters": {
+        "path": "response",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        2144,
+        2992
+      ],
+      "id": "5b2c7232-af3c-431a-836b-3060e871d014",
+      "name": "Response",
+      "webhookId": "signature-response"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "=<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"UTF-8\" />\n  <title>Confirming Arbitration</title>\n  <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\" />\n</head>\n\n<body style=\"font-family: sans-serif; background-color: #f4f7f9; padding: 20px; color: #2d3748; margin:0;\">\n\n  <div style=\"max-width: 650px; margin: 0 auto; background: white; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);\">\n\n    <div style=\"background-color: {{ $json.query.action === 'accept' ? '#28a745' : '#dc3545' }}; color: white; padding: 25px; text-align: center;\">\n      <h2 style=\"margin: 0;\">Confirm Your Decision</h2>\n      <p style=\"margin: 5px 0 0; opacity: 0.9;\">Case ID: {{ $json.query.caseId }}</p>\n    </div>\n\n    <div style=\"padding: 30px;\">\n      <p>\n        You are about to <strong>{{ $json.query.action === 'accept' ? 'ACCEPT' : 'DECLINE' }}</strong>\n        the contract (Case #{{ $json.query.caseId }}) sent to your email{{ $json.query.action === 'accept' ? ' as well as the binding arbitration agreement':''}}. \n      </p>\n\n      {{ $json.query.action === 'accept' ?\n` <div style=\"background-color: #fffaf0; padding: 20px; border: 1px solid #feebc8; border-radius: 8px; font-size: 13px; margin-bottom: 25px;\">\n\n  <div class=\"wrap\">\n    <div class=\"card\">\n      <h1>BINDING ARBITRATION AGREEMENT</h1>\n      <div class=\"subtitle\">(AI Arbitration Platform)</div>\n\n      <h2>1. Agreement to Arbitrate</h2>\n      <p>\n        By submitting a contract, accepting terms, depositing escrow funds, or otherwise using the Platform, each Party\n        irrevocably agrees that any dispute arising out of or relating to the submitted contract shall be resolved\n        exclusively through binding arbitration conducted via the Platform.\n      </p>\n      <p>\n        This Agreement is governed by the Federal Arbitration Act (9 U.S.C. §1 et seq.).\n      </p>\n      <p>\n        The Parties knowingly and voluntarily waive the right to litigate in court, including the right to a jury trial,\n        except solely for enforcement of a Final Award.\n      </p>\n\n      <h2>2. AI Arbitrator and HITL Review</h2>\n      <p>\n        The Parties expressly consent to arbitration conducted by automated artificial intelligence systems.\n      </p>\n      <p>\n        The Platform may use Large Language Models (LLMs), machine learning systems, and other AI tools to:\n      </p>\n      <ul>\n        <li>Review submissions</li>\n        <li>Analyze evidence</li>\n        <li>Interpret contractual terms</li>\n        <li>Determine liability</li>\n        <li>Calculate and issue awards</li>\n      </ul>\n      <p>\n        A designated Human-in-the-Loop (“HITL”) reviewer may review and revert an AI determination. If reverted, the\n        matter may be reassigned to the same or a different AI system for redetermination.\n      </p>\n      <p>\n        A determination not reverted by a HITL reviewer, or a determination issued following redetermination,\n        constitutes the Final Award.\n      </p>\n\n      <h2>3. Procedure</h2>\n      <p>Arbitration is initiated and conducted electronically.</p>\n      <p>Electronic notice to the registered email address constitutes valid and sufficient service.</p>\n      <p>No in-person hearing shall be required unless mandated by applicable law.</p>\n      <p>\n        Texas is designated as the legal seat of arbitration, and Texas law governs to the extent not preempted by the\n        Federal Arbitration Act.\n      </p>\n\n      <h2>4. Finality and Enforcement</h2>\n      <p>\n        The Final Award is final, binding, and enforceable. Judgment upon the Final Award may be entered in any court of\n        competent jurisdiction.\n      </p>\n      <p>\n        The Parties waive all appellate or review rights except those expressly permitted under the Federal Arbitration Act.\n      </p>\n      <p>Class, collective, and representative proceedings are prohibited.</p>\n\n      <h2>5. Escrow Authority</h2>\n      <p>\n        If escrow funds are deposited into the designated wallet, the Parties irrevocably authorize automated distribution\n        of such funds in accordance with the Final Award.\n      </p>\n\n      <h2>6. Fees</h2>\n      <p>\n        All administrative, filing, and processing fees are strictly non-refundable, regardless of outcome, withdrawal,\n        settlement, review, or redetermination.\n      </p>\n\n      <h2>7. Electronic Consent</h2>\n      <p>\n        By clicking “Accept,” “Confirm,” submitting escrow funds, or otherwise indicating assent, each Party provides\n        legally binding electronic consent under the U.S. E-SIGN Act and applicable Texas electronic transaction laws,\n        with the same force and effect as a handwritten signature.\n      </p>\n\n      <h2>8. Severability and Survival</h2>\n      <p>\n        If any provision is deemed unenforceable, the remaining provisions shall remain in full force and effect.\n      </p>\n      <p>\n        This Arbitration Agreement survives termination of the contract and resolution of the dispute.\n      </p>\n    </div>\n  </div>\n</div>`\n:\n`<div style=\"background-color: #fff5f5; padding: 20px; border: 1px solid #feb2b2; border-radius: 8px; font-size: 13px; margin-bottom: 25px; color: #c53030;\">\n  <strong>Note on Declining:</strong><br>\n  By confirming, you are rejecting this contract. This case will be closed, and no further action will be taken.\n</div>`\n}}\n\n      <div style=\"text-align: center;\">\n        <a href=\"{{ $vars.BASE_URL }}webhook{{ $execution.mode === 'production' ? '' : '-test' }}/signature-response?caseId={{ $json.query.caseId }}&party={{ $json.query.party }}&action={{ $json.query.action }}&token={{ $json.query.token }}&confirmed=true\"\n           style=\"background: {{ $json.query.action === 'accept' ? '#28a745' : '#dc3545' }}; color: white; padding: 16px 40px; text-decoration: none; border-radius: 8px; font-weight: bold; display: block; font-size: 16px; margin-bottom: 20px;\">\n          CONFIRM {{ $json.query.action === 'accept' ? 'ACCEPTANCE' : 'DECLINE' }}\n        </a>\n\n        <a href=\"#\"\n           onclick=\"document.body.innerHTML='<div style=\\'text-align:center; padding:50px; font-family:sans-serif; color:#2d3748;\\'><h2>No action taken.</h2><p>You can safely close this window.</p></div>'; return false;\"\n           style=\"font-size: 12px; color: #718096; text-decoration: none; border: 1px solid #cbd5e0; padding: 6px 12px; border-radius: 4px; background: #f7fafc;\">\n          Not decided yet: Close\n        </a>\n\n        <p style=\"margin-top: 25px; font-size: 11px; color: #a0aec0;\">\n          By clicking confirm, you apply your digital signature via Texas Blockchain Center LLC.\n        </p>\n      </div>\n\n    </div>\n  </div>\n\n</body>\n</html>\n\n<p style=\"margin-top: 30px; text-align: center;\">\n  <span style=\"font-size: 11px; color: #888888; font-family: sans-serif; letter-spacing: 0.5px;\">\n    AI Arbitration Platform\n  </span>\n</p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        2368,
+        2992
+      ],
+      "id": "cbaa59df-5583-4844-ad15-bf09570debf2",
+      "name": "Terms - Decision"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ",
+          "mode": "list",
+          "cachedResultName": "Arbitration",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1664223804,
+          "mode": "list",
+          "cachedResultName": "Cases",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/10akXjIyzjU6ljEq03s_B51Jgjx0t_HYxfErSVwfTqIQ/edit#gid=1664223804"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Case ID": "={{ $json.CaseId }}",
+            "Time": "={{ $now }}",
+            "Seller": "={{ $json.Seller }}",
+            "Buyer": "={{ $json.Buyer }}",
+            "Seller Email": "={{ $json.SellerEmail }}",
+            "Buyer Email": "={{ $json.BuyerEmail }}",
+            "Seller Token": "={{ $json.Seller_Token }}",
+            "Buyer Token": "={{ $json.Buyer_Token }}",
+            "Contract Text": "={{ $json.ContractText }}",
+            "Folder Link": "={{ $json.webViewLink }}",
+            "Escrow Address": "={{ $vars.ESCROW_WALLET }}",
+            "Escrow Fund": "={{ $json.EscrowFund }}",
+            "Fee": "={{ $json.Fee }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Case ID",
+              "displayName": "Case ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Seller",
+              "displayName": "Seller",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Buyer",
+              "displayName": "Buyer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Seller Email",
+              "displayName": "Seller Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Buyer Email",
+              "displayName": "Buyer Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Seller Token",
+              "displayName": "Seller Token",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Buyer Token",
+              "displayName": "Buyer Token",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Seller Wallet",
+              "displayName": "Seller Wallet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Wallet",
+              "displayName": "Buyer Wallet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Contract Text",
+              "displayName": "Contract Text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Seller Response",
+              "displayName": "Seller Response",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Response",
+              "displayName": "Buyer Response",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Folder Link",
+              "displayName": "Folder Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Escrow Address",
+              "displayName": "Escrow Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Escrow Fund",
+              "displayName": "Escrow Fund",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Fee",
+              "displayName": "Fee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Deposited Fund",
+              "displayName": "Deposited Fund",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Payment to Seller",
+              "displayName": "Payment to Seller",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Refund to Buyer",
+              "displayName": "Refund to Buyer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Tip to Seller",
+              "displayName": "Tip to Seller",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Withdrawal",
+              "displayName": "Buyer Withdrawal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Payment Request Time",
+              "displayName": "Payment Request Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Refund Request Time",
+              "displayName": "Refund Request Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Dispute Time",
+              "displayName": "Dispute Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Adjudication Time",
+              "displayName": "Adjudication Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Determination Time",
+              "displayName": "Determination Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Decision",
+              "displayName": "Decision",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Award",
+              "displayName": "Seller Award",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Award",
+              "displayName": "Buyer Award",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Seller Payout",
+              "displayName": "Seller Payout",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Buyer Payout",
+              "displayName": "Buyer Payout",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Appeal Time",
+              "displayName": "Appeal Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1760,
+        2656
+      ],
+      "id": "390aadd8-6805-41a1-9598-5a7e4a1dc1a7",
+      "name": "Add Case Info",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8PyGKtbWRXXj7YKz",
+          "name": "Sheets: governplanet"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1pabwGJ-m-IkKoiG9uZn1yo-cthC5C42Qm4F3nbQcat4",
+          "mode": "list",
+          "cachedResultName": "Arbitration",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pabwGJ-m-IkKoiG9uZn1yo-cthC5C42Qm4F3nbQcat4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1813252170,
+          "mode": "list",
+          "cachedResultName": "Files",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pabwGJ-m-IkKoiG9uZn1yo-cthC5C42Qm4F3nbQcat4/edit#gid=1813252170"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Case ID (FK)": "={{ $json.CaseId }}",
+            "Time": "={{ $now }}",
+            "Submitter": "System",
+            "Email": "ceo@texasbc.org",
+            "Original Name": "={{ $json.name }}",
+            "Secure Name": "Contract.pdf",
+            "ID": "={{ $json.id }}",
+            "Message: ": "Contract",
+            "Hash": "={{ $json.fileHash }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Case ID (FK)",
+              "displayName": "Case ID (FK)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Submitter",
+              "displayName": "Submitter",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Original Name",
+              "displayName": "Original Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Secure Name",
+              "displayName": "Secure Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Message: ",
+              "displayName": "Message: ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Hash",
+              "displayName": "Hash",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2368,
+        2464
+      ],
+      "id": "99ed42aa-3f4a-4990-91b2-13c23516b450",
+      "name": "Add File Info",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8PyGKtbWRXXj7YKz",
+          "name": "Sheets: governplanet"
+        }
+      },
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "pinData": {
+    "Create a Case": [
+      {
+        "json": {
+          "Seller": "Sellerson",
+          "Buyer": "Buyerson",
+          "SellerEmail": "ceo@paperscore.org",
+          "BuyerEmail": "dr.blockchain@icloud.com",
+          "EscrowFundETH": 0.01,
+          "ContractText": "# Real Estate Purchase Agreement \r\n\r\n## 1. Parties\r\n\r\n**Seller:**  \r\nName: Sellerson\r\n\r\n**Buyer:**  \r\nName: Buyerson\r\n\r\nThe Seller and Buyer are collectively referred to as the “Parties”.\r\n\r\n## 2. Property\r\n\r\nThe Seller agrees to sell, and the Buyer agrees to buy, the following real property located in Tehran (the “Property”):\r\n\r\n- **Address:** Tehran, Zaferanieh, P 352/2 \r\n- **Parcel/Deed Number:** 23451325\r\n- **Description:** The full house is 600 square meters \r\n\r\nThe Property shall be delivered in its current condition, as inspected by the Buyer, or as described in an attached exhibit (if any).\r\n\r\n## 3. Purchase Price\r\n\r\nThe total purchase price for the Property is **450 Ether (ETH)** (four hundred fifty Ether).  \r\nThe Buyer shall pay this amount in full, in Ether, into an escrow account as specified in Section 4.\r\n\r\n## 4. Escrow Arrangement\r\n\r\n### 4.1 Escrow Service\r\nThe Parties shall engage a mutually agreed escrow service that holds cryptoassets and supports AI‑powered arbitration (the “Escrow Service”). The Escrow Service must be capable of receiving, holding, and releasing Ether based on:\r\n- Joint written instructions from both Parties, or\r\n- A binding decision rendered by the AI Arbitration System described in Section 7.\r\n\r\n### 4.2 Deposit\r\nWithin **5 business days** after signing this Agreement, the Buyer shall transfer exactly 450 ETH to the escrow address provided by the Escrow Service. The Buyer shall provide proof of transfer to the Seller.\r\n\r\n### 4.3 Escrow Instructions\r\nThe Escrow Service is instructed to hold the funds until the earliest of:\r\n- The Buyer’s confirmation of delivery (Section 5.3);\r\n- The Delivery Deadline (Section 5.2) without delivery, followed by the Buyer’s refund request (Section 6); or\r\n- A final decision from the AI Arbitration System (Section 7).\r\n\r\n## 5. Delivery and Acceptance\r\n\r\n### 5.1 Seller’s Obligation\r\nThe Seller shall deliver possession of the Property to the Buyer no later than **30 calendar days** from the date the Escrow Service confirms receipt of the full 450 ETH deposit (the “Delivery Deadline”).\r\n\r\nDelivery includes:\r\n- Vacant possession of the Property;\r\n- All keys, access cards, and remote controls;\r\n- Copies of the deed, utility bills, and any other documents necessary for transfer of ownership.\r\n\r\n### 5.2 Buyer’s Inspection\r\nUpon notice from the Seller that the Property is ready for delivery, the Buyer shall have **3 business days** to inspect the Property and verify that it matches the agreed condition.\r\n\r\n### 5.3 Confirmation of Delivery\r\nIf the Buyer is satisfied, the Buyer shall promptly send a confirmation notice to the Escrow Service (with a copy to the Seller). The confirmation must be in writing (email or through the Escrow Service’s platform) and shall instruct the Escrow Service to release the 450 ETH to the Seller’s Ethereum address.\r\n\r\nOnce the Buyer confirms delivery, the funds shall be released irrevocably.\r\n\r\n## 6. Default – Failure to Deliver\r\n\r\nIf the Seller fails to deliver the Property by the Delivery Deadline, the Buyer may request a refund from the Escrow Service. The refund request must be made **after** the Delivery Deadline and **before** any confirmation of delivery.\r\n\r\nUpon receiving such a request, the Escrow Service shall return the full 450 ETH to the Buyer’s Ethereum address, unless the Seller disputes the refund by initiating arbitration under Section 7.\r\n\r\n## 7. AI‑Powered Arbitration\r\n\r\n### 7.1 Agreement to Arbitrate\r\nAny dispute arising out of or relating to this Agreement, including the failure to deliver, the condition of the Property, or the validity of a refund request, shall be finally resolved by binding arbitration administered by the “AI Arbitration System”. The Parties agree to submit to the jurisdiction of that system.\r\n\r\n### 7.2 Initiation\r\nEither Party may initiate arbitration by filing a claim through the AI Arbitration System’s platform within **7 days** of the event giving rise to the dispute. The initiating Party must pay any required fees (which may be reimbursed as part of the ruling).\r\n\r\n### 7.3 Evidence and Procedure\r\nThe AI Arbitration System will allow both Parties to submit evidence (documents, photos, messages, etc.) within a specified time frame. The decision shall be rendered based on the evidence and the terms of this Agreement, using an automated or AI‑assisted process defined by the system.\r\n\r\n### 7.4 Binding Decision\r\nThe decision of the AI Arbitration System shall be final and binding on both Parties. The Escrow Service is authorized to release the funds (or take other action) strictly in accordance with the arbitration ruling.\r\n\r\n### 7.5 Costs\r\nThe costs of arbitration shall be borne as determined by the AI Arbitration System, unless the Parties agree otherwise.\r\n\r\n## 8. Governing Law\r\n\r\nThis Agreement shall be governed by the laws of the Islamic Republic of Iran. However, the arbitration procedure shall be conducted by the AI Arbitration System according to its own rules, which may not be subject to Iranian court procedure. The Parties acknowledge that the arbitration decision will be enforced through the Escrow Service’s automated mechanisms.\r\n\r\n## 9. Miscellaneous\r\n\r\n### 9.1 Entire Agreement\r\nThis Agreement constitutes the entire understanding between the Parties and supersedes all prior negotiations and agreements.\r\n\r\n### 9.2 Amendments\r\nAny amendment must be in writing and signed by both Parties.\r\n\r\n### 9.3 Notices\r\nAll notices shall be sent to the email addresses provided above. Notices to the Escrow Service shall be sent through its official platform.\r\n\r\n### 9.4 Fees\r\nBlockchain transaction fees (gas costs) for transferring Ether to and from escrow shall be borne by the Party initiating the transfer. Escrow service fees, if any, shall be shared equally unless otherwise agreed.\r\n\r\n### 9.5 Acceptance of Terms\r\nBy signing below, the Parties acknowledge that they have read, understood, and agree to be bound by this Agreement, including the use of an AI‑powered arbitration system. \r\n",
+          "ContractFile": {
+            "filename": "Offer PDF.pdf",
+            "mimetype": "application/pdf",
+            "size": 286846
+          },
+          "submittedAt": "2026-03-14T20:07:34.814-07:00",
+          "formMode": "test"
+        },
+        "binary": {
+          "ContractFile": {
+            "mimeType": "application/pdf",
+            "fileType": "pdf",
+            "fileExtension": "pdf",
+            "data": "filesystem-v2",
+            "fileName": "Offer PDF.pdf",
+            "id": "filesystem-v2:workflows/TJGbaGE85IU8AXcw/executions/temp/binary_data/501176a6-0886-4ccc-ae6c-f8386bff1808",
+            "fileSize": "287 kB",
+            "bytes": 286846
+          }
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Signature Response": [
+      {
+        "json": {
+          "headers": {
+            "host": "arbitration.app.n8n.cloud",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+            "accept-encoding": "gzip, br",
+            "accept-language": "en-US,en;q=0.9",
+            "cdn-loop": "cloudflare; loops=1; subreqs=1",
+            "cf-connecting-ip": "2601:644:4900:ea20:3db7:f250:e1bd:99ca",
+            "cf-ew-via": "15",
+            "cf-ipcountry": "US",
+            "cf-ray": "9dc85c2adb35152b-SJC",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-worker": "n8n.cloud",
+            "cookie": "_gcl_aw=GCL.1773521270.CjwKCAjwjtTNBhB0EiwAuswYhqDqEz46bZSS4KqfFaItPnXZ_exMO2VvX9Eqf2seKUQO7KUBxp7ynxoCFusQAvD_BwE; _gcl_au=1.1.888409153.1773521269; _ga=GA1.1.1254284641.1773521270; rl_page_init_referrer=RudderEncrypt%3AU2FsdGVkX19Eh8zu1KbpjoU1k9ciFJMuB1Oq1dGdqbg%3D; rl_page_init_referring_domain=RudderEncrypt%3AU2FsdGVkX1%2BXYpsrFuEXuEjLBv%2F%2Fj%2BGlzUDC427PAsE%3D; _fbp=fb.1.1773521275378.714768191470051251; _ga_0SC4FF2FH9=GS2.1.s1773521269$o1$g1$t1773521281$j48$l0$h0; rl_anonymous_id=RudderEncrypt%3AU2FsdGVkX186QyyFuwUVPnsscC51Ob5ZChf4v0fSArMshdYMP1REte8SHkq%2FtWFJL%2FGGBIdNzfnJcAZprWOPuA%3D%3D; rl_group_id=RudderEncrypt%3AU2FsdGVkX1%2Bv2AYD02dL2UPS6%2BRMWph9f7iGdRPPAsk%3D; rl_group_trait=RudderEncrypt%3AU2FsdGVkX1%2B9f012WI41dSzrM40l3x3wOIhpEvgoXsw%3D; rl_user_id=RudderEncrypt%3AU2FsdGVkX1%2FAH%2FDCVDnVbFeQIvS2hOlpH8kJ6L2eBdLIPx4p6eb5RxR6%2BWQ6Gbgqzm1S0RghnUh9UDRWXQa86LTwOwOxK%2Bx42j7n0FnWPgvYoimAoMTJFUbL3t0Pe6cX%2FyG3g85i9tXCbZHXYxbADhLyDC6Zea0vHxD2RevoNpg%3D; rl_trait=RudderEncrypt%3AU2FsdGVkX1%2Brep9hYrvR4Szj6k12AUZY6StR%2FHsvg1fT7cFAP%2Bsd1TJvZriGQ%2B9IC6DgnIH8iBQojR0dz%2FvQtmu%2BM5Lb71qzqUBtZRCo76XQTb5%2BOGONneIfaRHShptYZtOpaiF2BEc7H0uUircEtK4uxbOT4o2WJCD%2BplG0rzov%2FZzS9TT4cGsym1K37vJCkcH9w5TKEOPnGEKeEIx19w%3D%3D; n8n_anonymous_id=e651edb1-cde8-492b-9284-d483c5cdb6e8; rl_session=RudderEncrypt%3AU2FsdGVkX19CmvBJuqc9%2FcVgPf7gG4rybureLyHWQUYO%2BjIvz7wCuTbyuJWktNEwOc8zdXr8clmnwUY8HgDiPLDcnoDHzJnMGSiJYSQwidHYNe1GK75z4TrDc%2F3tTx%2Ficr219wM1vKe0O3XNGNQCSA%3D%3D; ph_phc_4URIAm1uYfJO7j8kWSe0J8lc8IqnstRLS7Jx8NcakHo_posthog=%7B%22%24device_id%22%3A%22019cee1f-63a9-7ec8-b760-adc5c710fd95%22%2C%22distinct_id%22%3A%22b90ffdbc59f10e676c36dd1759918b25b17135aab9ea9e58b09a4edbc52cc3bc%23a4b6a4ca-580d-406f-a384-ad968e3dda19%22%2C%22%24sesid%22%3A%5B1773544588099%2C%22019cef54-3d2d-7130-9c12-90717cf21ecb%22%2C1773541801261%5D%2C%22%24epp%22%3Atrue%2C%22%24initial_person_info%22%3A%7B%22r%22%3A%22%24direct%22%2C%22u%22%3A%22https%3A%2F%2Farbitration.app.n8n.cloud%2Fsignin%22%7D%2C%22%24user_state%22%3A%22identified%22%7D",
+            "priority": "u=0, i",
+            "sec-ch-ua": "\"Chromium\";v=\"146\", \"Not-A.Brand\";v=\"24\", \"Google Chrome\";v=\"146\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"macOS\"",
+            "sec-fetch-dest": "document",
+            "sec-fetch-mode": "navigate",
+            "sec-fetch-site": "cross-site",
+            "sec-fetch-user": "?1",
+            "upgrade-insecure-requests": "1",
+            "x-forwarded-for": "2601:644:4900:ea20:3db7:f250:e1bd:99ca, 172.69.134.14",
+            "x-forwarded-host": "arbitration.app.n8n.cloud",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "traefik-prod-users-gwc-52-85dcdfd95c-d7w7b",
+            "x-is-trusted": "yes",
+            "x-real-ip": "2601:644:4900:ea20:3db7:f250:e1bd:99ca"
+          },
+          "params": {},
+          "query": {
+            "caseId": "7133",
+            "party": "Buyer",
+            "action": "accept",
+            "token": "u79xq7uwhob4wxm1x34hru",
+            "confirmed": "true"
+          },
+          "body": {},
+          "webhookUrl": "https://arbitration.app.n8n.cloud/webhook-test/signature-response",
+          "executionMode": "test"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Contract PDF": {
+      "main": [
+        [
+          {
+            "node": "Merge6",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Create folder": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "To-Seller",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "To-Buyer",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Success",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Add Case Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a Case": {
+      "main": [
+        [
+          {
+            "node": "Config & Case ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config & Case ID": {
+      "main": [
+        [
+          {
+            "node": "Create folder",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Update Buyer": {
+      "main": [
+        [
+          {
+            "node": "Generate HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Seller": {
+      "main": [
+        [
+          {
+            "node": "Generate HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Wallet": {
+      "main": [
+        [
+          {
+            "node": "Wallet is Valid",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Wallet": {
+      "main": [
+        [
+          {
+            "node": "To Submitter",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Success!",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lookup Case Wallet": {
+      "main": [
+        [
+          {
+            "node": "Link is Valid",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Admin Sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wallet is Valid": {
+      "main": [
+        [
+          {
+            "node": "Lookup Case Wallet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Invalid Address",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Link is Valid": {
+      "main": [
+        [
+          {
+            "node": "Update Wallet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Invalid Link",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Case & Status": {
+      "main": [
+        [
+          {
+            "node": "Invalid Link/Case",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Invalid Link/Case",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Already Declined",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Buyer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Seller",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Already Responded",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate HTML": {
+      "main": [
+        [
+          {
+            "node": "Status Message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Show Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lookup Case": {
+      "main": [
+        [
+          {
+            "node": "Case & Status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Admin Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Signature Response": {
+      "main": [
+        [
+          {
+            "node": "Lookup Case",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wallet Address": {
+      "main": [
+        [
+          {
+            "node": "Validate Wallet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Initiate": {
+      "main": [
+        [
+          {
+            "node": "Create the Main Folder",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Create the Spreadsheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create the Spreadsheet": {
+      "main": [
+        [
+          {
+            "node": "Columns for Messages Sheet",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Columns for Files Sheet",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Columns for Cases Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Columns for Files Sheet": {
+      "main": [
+        [
+          {
+            "node": "Create Columns for Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create the Main Folder": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge3": {
+      "main": [
+        [
+          {
+            "node": "Show the Links",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Public Access",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Move file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crypto1": {
+      "main": [
+        [
+          {
+            "node": "Merge6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge6": {
+      "main": [
+        [
+          {
+            "node": "Add File Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Columns for Messages Sheet": {
+      "main": [
+        [
+          {
+            "node": "Create Columns for Messages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Columns for Cases Sheet": {
+      "main": [
+        [
+          {
+            "node": "Create Columns for Cases",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Crypto1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Contract PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Terms Link": {
+      "main": [
+        [
+          {
+            "node": "Terms",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Response": {
+      "main": [
+        [
+          {
+            "node": "Terms - Decision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "IoDiKYr2P0CCN0tS",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "dfa2ddb9-3bb8-446e-85ca-0aa28bcbd0bf",
+  "meta": {
+    "instanceId": "b90ffdbc59f10e676c36dd1759918b25b17135aab9ea9e58b09a4edbc52cc3bc"
+  },
+  "id": "TJGbaGE85IU8AXcw",
+  "tags": []
+}
