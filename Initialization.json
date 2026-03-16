@@ -261,13 +261,13 @@
             {
               "id": "e5ac1233-7b63-40f3-9976-6c355f0568ec",
               "name": "EscrowFund",
-              "value": "={{ $json.EscrowFundETH * 1e18}}",
+              "value": "={{$json.EscrowFundETH * 1e18}}",
               "type": "number"
             },
             {
               "id": "47cd8f60-0346-4c9e-8050-b9d959f250e6",
               "name": "Fee",
-              "value": "=0",
+              "value": "={{$vars.PROCESSING_FEE}}",
               "type": "number"
             }
           ]
