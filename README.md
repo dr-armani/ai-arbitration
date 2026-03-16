@@ -119,6 +119,39 @@ To run this system, you need credentials and configuration for:
 
 ---
 
+## Environment Variables
+
+The system relies on several project variables configured in **n8n → Project Settings → Variables**.
+
+These variables should **never be committed to the repository**.  
+Use secure secrets management in production.
+
+| Variable | Description | Example |
+|---|---|---|
+| `ADMIN_EMAIL` | Email address receiving system error alerts | `admin@example.com` |
+| `BASE_URL` | Base URL of the arbitration platform used in email links | `https://arbitration.example.com` |
+| `ESCROW_WALLET` | Ethereum wallet used as the escrow account | `0x0000000000000000000000000000000000000000` |
+| `PRIVATE_KEY` | Private key used to sign payout transactions | `your_private_key_here` |
+| `PROCESSING_FEE` | Platform processing fee (in Wei) deducted from escrow | `1000000000000000` |
+
+### Notes
+
+- `PRIVATE_KEY` must be stored securely and **must never be exposed publicly**.
+- `ESCROW_WALLET` should correspond to the wallet derived from `PRIVATE_KEY`.
+- `PROCESSING_FEE` is defined in **Wei** to avoid floating-point precision issues.
+
+Example usage inside workflows:
+
+```javascript
+{{$vars.ADMIN_EMAIL}}
+{{$vars.BASE_URL}}
+{{$vars.ESCROW_WALLET}}
+{{$vars.PRIVATE_KEY}}
+{{$vars.PROCESSING_FEE}}
+```
+
+----
+
 ## Deployment notes
 
 Import the JSON workflows into n8n, connect the required credentials, configure the shared environment variables, and ensure all workflows point to the same case database and storage locations. The initialization workflow is the public entry point; the others operate as background, callback, or scheduled workflows. 
