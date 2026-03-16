@@ -129,10 +129,10 @@ Use secure secrets management in production.
 | Variable | Description | Example |
 |---|---|---|
 | `ADMIN_EMAIL` | Email address receiving system error alerts | `admin@example.com` |
-| `BASE_URL` | Base URL of the arbitration platform used in email links | `https://arbitration.example.com` |
+| `BASE_URL` | Base URL of the arbitration platform used in email links | `https://arbitration.app.n8n.cloud/` |
 | `ESCROW_WALLET` | Ethereum wallet used as the escrow account | `0x0000000000000000000000000000000000000000` |
 | `PRIVATE_KEY` | Private key used to sign payout transactions | `your_private_key_here` |
-| `PROCESSING_FEE` | Platform processing fee (in Wei) deducted from escrow | `1000000000000000` |
+| `PROCESSING_FEE` | Platform processing fee in Wei | `1000000000000000` |
 
 ### Notes
 
