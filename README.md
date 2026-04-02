@@ -1,8 +1,8 @@
 # AI Arbitration Platform
 
-An automated arbitration system built in **n8n** for contracts, escrow tracking, dispute handling, AI-assisted adjudication, and post-award execution.
+An automated arbitration system built in **n8n** for contracts, escrow tracking, dispute handling, AI adjudication, and post-award execution.
 
-It combines:
+It includes:
 
 - contract intake and case creation
 - tokenized party actions by email
